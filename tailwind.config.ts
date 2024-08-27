@@ -17,6 +17,23 @@ const config: Config = {
       },
     },
     extend: {
+      colors: {
+        primary: {
+          DEFAULT: "rgb(var(--primary) / <alpha-value>) /* #f44a24 */",
+        },
+        secondary: {
+          DEFAULT: "rgb(var(--secondary) / <alpha-value>) /* #00235b */",
+        },
+        destructive: {
+          DEFAULT: "rgb(var(--destructive) / <alpha-value>) /* #eb6e63 */",
+        },
+        background: "hsl(var(--background) / <alpha-value>) /* #fafafa */",
+        heading: "hsl(var(--heading) / <alpha-value>) /* #1b2632 */",
+        body: {
+          DEFAULT: "hsl(var(--body) / <alpha-value>) /* #1a1c1e */",
+          light: "hsl(var(--body-light) / <alpha-value>) /* #6d7378 */",
+        },
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
