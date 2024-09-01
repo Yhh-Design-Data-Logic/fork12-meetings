@@ -5,7 +5,7 @@ import { Navigation } from "./navigation";
 
 export const Sidebar = () => {
   return (
-    <aside className="hidden w-56 border-r border-zinc-200 bg-white md:block xl:w-64">
+    <aside className="hidden md:z-10 md:block md:w-[var(--sidebar-width)] md:shrink-0 md:border-r md:border-zinc-200 md:bg-white">
       <div className="flex h-[var(--header-area-height)] items-center justify-center border-b border-zinc-200 p-4">
         <Link href="/">
           <Image
