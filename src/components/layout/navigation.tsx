@@ -1,7 +1,7 @@
 import { CalendarIcon, LayoutDashboardIcon } from "lucide-react";
 
 import { parentPages, teacherPages } from "./constants";
-import { NavItem } from "./nav-item";
+import { NavItem } from "./elements";
 
 const iconsMapper = {
   dashboard: <LayoutDashboardIcon />,

@@ -1,16 +1,24 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type NavItemProps = {
+import { cn } from "@/lib/utils";
+
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { pageNames } from "./constants";
+
+export const NavItem = ({
+  href,
+  text,
+  icon,
+  onClick,
+}: {
   href: string;
   text: string;
   icon: React.ReactElement;
   onClick?: () => void;
-};
-export const NavItem = ({ href, text, icon, onClick }: NavItemProps) => {
+}) => {
   const pathname = usePathname();
 
   return (
