@@ -8,22 +8,34 @@ import { formatDate, isSameDay } from "@/lib/date";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 
-type MeetingCardProps = {
+type BaseMeetingCardProps<E extends React.ElementType> = {
   id: string;
   startDate: Date;
   endDate: Date;
   name: string;
+  as?: E;
 };
-export const MeetingCard = ({
+
+type MeetingCardProps<E extends React.ElementType> = BaseMeetingCardProps<E> &
+  Omit<React.ComponentProps<E>, keyof BaseMeetingCardProps<E> | "className">;
+
+export const MeetingCard = <E extends React.ElementType = "div">({
   id,
   startDate,
   endDate,
   name,
-}: MeetingCardProps) => {
+  as,
+  ...otherProps
+}: MeetingCardProps<E>) => {
   const router = useRouter();
 
+  const Tag = as || "div";
+
   return (
-    <div className="flex max-w-2xl divide-x rounded-xl border border-zinc-200 bg-white p-4 md:px-6">
+    <Tag
+      className="flex max-w-2xl divide-x rounded-xl border border-zinc-200 bg-white p-4 md:px-6"
+      {...otherProps}
+    >
       {/* person Info */}
       <div className="flex items-center space-x-2 pr-4">
         <Avatar className="">
@@ -67,6 +79,6 @@ export const MeetingCard = ({
           Join
         </Button>
       </div>
-    </div>
+    </Tag>
   );
 };
