@@ -4,7 +4,7 @@ import { useMeetings } from "@/hooks";
 import { formatDate, isSameDay } from "@/lib/date";
 import { cn } from "@/lib/utils";
 
-import MeetingCard, { MeetingCardSkeleton } from "@/components/meeting-card";
+import { MeetingCard, MeetingCardSkeleton } from "@/components/cards";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
