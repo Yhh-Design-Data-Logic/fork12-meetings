@@ -2,11 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { LogOutIcon } from "lucide-react";
 
+import authApi from "@/api/auth";
 import { cn } from "@/lib/utils";
 
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { pageNames } from "./constants";
+import { Button } from "../ui/button";
 
 export const NavItem = ({
   href,
@@ -71,4 +75,27 @@ export const PageHeading = () => {
     throw new Error(`Page name is found for this page url: ${pathname}.`);
 
   return <h1 className="text-3xl font-bold text-heading">{pageName}</h1>;
+};
+
+export const LogoutBtn = () => {
+  const logoutMutation = useMutation({
+    mutationFn: authApi.logout,
+    onSuccess: () => {
+      location.reload();
+    },
+  });
+
+  return (
+    <div className="mt-16 md:mt-24">
+      <Button
+        className="text-body-light"
+        variant="ghost"
+        loading={logoutMutation.isPending}
+        onClick={() => logoutMutation.mutate()}
+      >
+        <LogOutIcon className="mr-2 text-red-500" />
+        Logout
+      </Button>
+    </div>
+  );
 };

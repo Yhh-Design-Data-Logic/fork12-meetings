@@ -4,5 +4,9 @@ async function login({ email, password }: { email: string; password: string }) {
   await apiClient.login(email, password);
 }
 
-const authApi = { login };
+async function logout() {
+  await apiClient.logout();
+}
+
+const authApi = { login, logout };
 export default authApi;

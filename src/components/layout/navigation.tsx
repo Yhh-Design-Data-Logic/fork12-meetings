@@ -1,7 +1,7 @@
 import { CalendarIcon, LayoutDashboardIcon } from "lucide-react";
 
 import { parentPages, teacherPages } from "./constants";
-import { NavItem } from "./elements";
+import { LogoutBtn, NavItem } from "./elements";
 
 const iconsMapper = {
   dashboard: <LayoutDashboardIcon />,
@@ -21,18 +21,22 @@ export const Navigation = ({
   const pages = userType === "parent" ? parentPages : teacherPages;
 
   return (
-    <nav className={className}>
-      <ul className="space-y-4 xl:space-y-6">
-        {pages.map(({ href, icon, title }) => (
-          <NavItem
-            key={href}
-            href={href}
-            text={title}
-            icon={iconsMapper[icon]}
-            onClick={onNavItemClick}
-          />
-        ))}
-      </ul>
-    </nav>
+    <div className={className}>
+      <nav>
+        <ul className="space-y-4 xl:space-y-6">
+          {pages.map(({ href, icon, title }) => (
+            <NavItem
+              key={href}
+              href={href}
+              text={title}
+              icon={iconsMapper[icon]}
+              onClick={onNavItemClick}
+            />
+          ))}
+        </ul>
+      </nav>
+
+      <LogoutBtn />
+    </div>
   );
 };
