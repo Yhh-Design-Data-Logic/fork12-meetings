@@ -5,7 +5,7 @@ export const parentPages = [
 
 export const teacherPages = [
   { href: "/", title: "Meetings", icon: "dashboard" },
-  { href: "/calendar", title: "Calendar", icon: "calendar" },
+  { href: "/teacher-calendar", title: "Calendar", icon: "calendar" },
 ] as const;
 
 export const pageNames = [
@@ -15,6 +15,10 @@ export const pageNames = [
   },
   {
     url: "/calendar",
+    name: "My Calendar",
+  },
+  {
+    url: "/teacher-calendar",
     name: "My Calendar",
   },
 ];
