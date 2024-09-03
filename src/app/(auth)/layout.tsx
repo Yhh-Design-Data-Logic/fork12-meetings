@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+
+import { Toaster } from "@/components/ui/sonner";
+
 import Providers from "../providerst";
 import "../globals.css";
 
@@ -17,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-background text-body`}>
+        <Toaster />
         <Providers>{children}</Providers>
       </body>
     </html>
