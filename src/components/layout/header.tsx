@@ -23,7 +23,7 @@ export const Header = () => {
       <div className="hidden md:ml-[var(--sidebar-width)] md:flex md:h-full md:items-center md:justify-between md:px-6">
         <PageHeading />
 
-        <ProfileInfo name="Husam Mohammed" email="husam.m.ashour@gmail.com" />
+        <ProfileInfo />
       </div>
 
       <MobileMenu />
