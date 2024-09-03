@@ -95,7 +95,7 @@ export const LogoutBtn = () => {
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
-      location.reload();
+      location.href = "/login";
     },
   });
 
