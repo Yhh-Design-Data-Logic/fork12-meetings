@@ -18,7 +18,7 @@ export const validateAuth = (data: {}) => {
 
 export const setUserTypeInCookie = (type: string) => {
   const validatedUserType = z
-    .enum([UserType.TEACHER], {
+    .enum([UserType.TEACHER, UserType.PARENT], {
       message: `Invalid user type: "${type}". Please contact administrator.`,
     })
     .parse(type);
