@@ -1,8 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+
+import authApi from "@/api/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +27,8 @@ const FormSchema = z.object({
 });
 
 export const LoginForm = () => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -31,8 +37,15 @@ export const LoginForm = () => {
     },
   });
 
+  const loginMutation = useMutation({
+    mutationFn: authApi.login,
+    onSuccess: () => {
+      router.push("/");
+    },
+  });
+
   function onSubmit(values: z.infer<typeof FormSchema>) {
-    console.log(values);
+    loginMutation.mutate(values);
   }
 
   return (
@@ -71,7 +84,12 @@ export const LoginForm = () => {
             )}
           />
 
-          <Button type="submit" className="w-full" size="lg">
+          <Button
+            type="submit"
+            className="w-full"
+            size="lg"
+            loading={loginMutation.isPending}
+          >
             Login
           </Button>
         </form>
