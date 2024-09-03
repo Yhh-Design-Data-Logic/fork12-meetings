@@ -4,9 +4,11 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import authApi from "@/api/auth";
+import { isZodError } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +43,9 @@ export const LoginForm = () => {
     mutationFn: authApi.login,
     onSuccess: () => {
       router.push("/");
+    },
+    onError: (error) => {
+      if (isZodError(error)) toast.error(error.errors[0].message);
     },
   });
 
