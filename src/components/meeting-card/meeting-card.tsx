@@ -7,6 +7,7 @@ import { formatDate, isSameDay } from "@/lib/date";
 
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Skeleton } from "../ui/skeleton";
 
 type BaseMeetingCardProps<E extends React.ElementType> = {
   id: string;
@@ -80,5 +81,41 @@ export const MeetingCard = <E extends React.ElementType = "div">({
         </Button>
       </div>
     </Tag>
+  );
+};
+
+export const MeetingCardSkeleton = () => {
+  return (
+    <div className="flex max-w-2xl divide-x rounded-xl border border-zinc-200 bg-white p-4 md:px-6">
+      {/* person Info */}
+      <div className="flex items-center space-x-2 pr-4">
+        <Skeleton className="h-10 w-10 rounded-full" />
+
+        <div className="flex flex-col">
+          <Skeleton className="mb-1 h-2 w-10" />
+          <Skeleton className="h-4 w-20" />
+        </div>
+      </div>
+
+      {/* Time Info */}
+      <div className="flex grow items-center px-4 md:px-8">
+        <div className="flex flex-col justify-center md:justify-start">
+          <span className="flex flex-wrap items-center">
+            <ClockIcon
+              className="mr-2 shrink-0"
+              size={18}
+              fill="#71717a"
+              stroke="#fff"
+            />
+            <Skeleton className="h-5 w-24" />
+          </span>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <div className="flex items-center px-4 md:px-8">
+        <Skeleton className="h-10 w-16 rounded-xl" />
+      </div>
+    </div>
   );
 };
