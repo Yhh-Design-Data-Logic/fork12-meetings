@@ -1,4 +1,9 @@
+"use client";
+
 import { CalendarIcon, LayoutDashboardIcon } from "lucide-react";
+
+import { getUserTypeFromCookie } from "@/lib/auth";
+import { UserType } from "@/types";
 
 import { parentPages, teacherPages } from "./constants";
 import { LogoutBtn, NavItem } from "./elements";
@@ -9,16 +14,13 @@ const iconsMapper = {
 };
 
 type NavigationProps = {
-  userType: string;
   className?: string;
   onNavItemClick?: () => void;
 };
-export const Navigation = ({
-  userType,
-  className,
-  onNavItemClick,
-}: NavigationProps) => {
-  const pages = userType === "parent" ? parentPages : teacherPages;
+export const Navigation = ({ className, onNavItemClick }: NavigationProps) => {
+  const userType = getUserTypeFromCookie();
+
+  const pages = userType === UserType.PARENT ? parentPages : teacherPages;
 
   return (
     <div className={className}>

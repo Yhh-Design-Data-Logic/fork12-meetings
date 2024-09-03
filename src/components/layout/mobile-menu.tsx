@@ -25,11 +25,7 @@ export const MobileMenu = () => {
           role="navigation"
         >
           <DrawerClose />
-          <Navigation
-            userType=""
-            className="p-4"
-            onNavItemClick={() => setOpen(false)}
-          />
+          <Navigation className="p-4" onNavItemClick={() => setOpen(false)} />
         </DrawerContent>
       </Drawer>
     </>
