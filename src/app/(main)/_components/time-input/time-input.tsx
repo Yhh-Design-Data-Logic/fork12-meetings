@@ -7,10 +7,8 @@ import { flushSync } from "react-dom";
 import { ClockIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type Time = `${number}${number}:${number}${number}:${number}${number}`;
-
 type TimeInputProps = {
-  onChange?: (time: Time) => void;
+  onChange?: (time: FullTime) => void;
   fullWidth?: boolean;
 };
 
@@ -27,7 +25,7 @@ export const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
 
     useEffect(() => {
       if (hours.length === 2 && minutes.length === 2 && seconds.length === 2) {
-        onChange && onChange(`${hours}:${minutes}:${seconds}` as Time);
+        onChange && onChange(`${hours}:${minutes}:${seconds}` as FullTime);
       }
     }, [hours, minutes, seconds]);
 
