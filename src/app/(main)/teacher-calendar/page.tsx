@@ -5,7 +5,8 @@ import { Loader2Icon } from "lucide-react";
 import { useAvailableInterviewSlots } from "@/hooks";
 
 import { AvailableInterviewSlot } from "@/components/cards";
-import { Button } from "@/components/ui/button";
+
+import { InterviewSlotsDialog } from "../_components";
 
 export default function CalendarPage() {
   const { isLoading, data } = useAvailableInterviewSlots();
@@ -13,7 +14,7 @@ export default function CalendarPage() {
   return (
     <div className="container py-10">
       <div className="mb-8 flex justify-end">
-        <Button size="lg">Add Interview Slots</Button>
+        <InterviewSlotsDialog />
       </div>
 
       <section>
