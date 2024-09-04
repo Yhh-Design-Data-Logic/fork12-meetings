@@ -83,7 +83,7 @@ export const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
             min={0}
             max={59}
             step={1}
-            onBlur={() => setMinutes(seconds.padStart(2, "0"))}
+            onBlur={() => setMinutes(minutes.padStart(2, "0"))}
             onChange={(e) => {
               if (e.target.value.length > 2) {
                 const sliceIndexes =
@@ -121,7 +121,7 @@ export const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
             min={0}
             max={59}
             step={1}
-            onBlur={() => setSeconds(minutes.padStart(2, "0"))}
+            onBlur={() => setSeconds(seconds.padStart(2, "0"))}
             onChange={(e) => {
               if (e.target.value.length > 2) {
                 const sliceIndexes =
