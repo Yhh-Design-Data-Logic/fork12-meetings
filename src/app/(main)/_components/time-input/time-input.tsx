@@ -42,9 +42,7 @@ export const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
             id={`${id}-hours`}
             className={inputClasses}
             placeholder="hh"
-            min={0}
-            max={23}
-            step={1}
+            value={hours}
             onBlur={() => setHours(hours.padStart(2, "0"))}
             onChange={(e) => {
               if (e.target.value.length > 2) {
@@ -73,16 +71,18 @@ export const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
                 document.getElementById(`${id}-minutes`)?.focus();
               }
             }}
-            value={hours}
+            onKeyDown={(event) => {
+              if (!/([0-9]|Backspace|Delete)/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
           />
           :
           <Input
             id={`${id}-minutes`}
             className={inputClasses}
             placeholder="mm"
-            min={0}
-            max={59}
-            step={1}
+            value={minutes}
             onBlur={() => setMinutes(minutes.padStart(2, "0"))}
             onChange={(e) => {
               if (e.target.value.length > 2) {
@@ -111,16 +111,18 @@ export const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
                 document.getElementById(`${id}-seconds`)?.focus();
               }
             }}
-            value={minutes}
+            onKeyDown={(event) => {
+              if (!/([0-9]|Backspace|Delete)/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
           />
           :
           <Input
             id={`${id}-seconds`}
             className={inputClasses}
             placeholder="ss"
-            min={0}
-            max={59}
-            step={1}
+            value={seconds}
             onBlur={() => setSeconds(seconds.padStart(2, "0"))}
             onChange={(e) => {
               if (e.target.value.length > 2) {
@@ -149,7 +151,11 @@ export const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
                 document.getElementById(`${id}-seconds`)?.blur();
               }
             }}
-            value={seconds}
+            onKeyDown={(event) => {
+              if (!/([0-9]|Backspace|Delete)/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
           />
         </div>
 
