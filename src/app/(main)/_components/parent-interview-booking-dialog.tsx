@@ -150,9 +150,9 @@ export const ParentInterviewBookingDialog = ({
                   />
                 </div>
 
-                <div>
-                  <Button type="submit" className="w-full" size="lg">
-                    Submit
+                <div className="flex justify-end">
+                  <Button type="submit" size="lg">
+                    Book
                   </Button>
                 </div>
               </form>
