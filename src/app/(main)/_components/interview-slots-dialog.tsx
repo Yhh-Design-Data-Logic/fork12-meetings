@@ -22,13 +22,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { TimeInput } from "./time-input";
+import { TimeInput, TimePicker } from "./time-input";
 
 const FormSchema = z.object({
   interviewDate: z.string().min(1, {
     message: "Required",
   }),
   interviewDuration: z.string().min(4, {
+    message: "Required",
+  }),
+  fromTime: z.string().min(4, {
+    message: "Required",
+  }),
+  toTime: z.string().min(4, {
     message: "Required",
   }),
 });
@@ -52,7 +58,7 @@ export const InterviewSlotsDialog = () => {
         <Button size="lg">Add Interview Slots</Button>
       </DialogTrigger>
 
-      <DialogContent className="lg:max-w-[900px]">
+      <DialogContent className="">
         <DialogHeader className="pb-4">
           <DialogTitle className="text-secondary-500 text-xl font-semibold lg:text-2xl">
             Interview Slots
@@ -93,6 +99,36 @@ export const InterviewSlotsDialog = () => {
                           min={new Date().toISOString().split("T")[0]}
                           {...field}
                         />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="md:flex md:space-x-12">
+                <FormField
+                  control={form.control}
+                  name="fromTime"
+                  render={({ field }) => (
+                    <FormItem className="w-36">
+                      <FormLabel>From</FormLabel>
+                      <FormControl>
+                        <TimePicker defaultTime="10:00" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="toTime"
+                  render={({ field }) => (
+                    <FormItem className="w-36">
+                      <FormLabel>To</FormLabel>
+                      <FormControl>
+                        <TimePicker defaultTime="12:00" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
