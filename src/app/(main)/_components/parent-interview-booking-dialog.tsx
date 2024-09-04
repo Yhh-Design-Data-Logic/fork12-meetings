@@ -83,7 +83,7 @@ export const ParentInterviewBookingDialog = ({
             <div className="mt-3 flex justify-center">
               <Loader2Icon size={40} className="animate-spin text-primary" />
             </div>
-          ) : data ? (
+          ) : data && Object.keys(data).length > 0 ? (
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -158,7 +158,7 @@ export const ParentInterviewBookingDialog = ({
               </form>
             </Form>
           ) : (
-            <p></p>
+            <p>No available meeting slots found.</p>
           )}
         </div>
       </DialogContent>
