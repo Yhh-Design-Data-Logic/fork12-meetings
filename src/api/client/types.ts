@@ -34,7 +34,7 @@ export type Timeslot = {
   teacher: number | Teacher;
   start_date: string;
   end_date: string;
-  meetings: number[] | Meeting[];
+  meeting: number[] | Meeting[];
 };
 
 type ChildrenTeachers = {
