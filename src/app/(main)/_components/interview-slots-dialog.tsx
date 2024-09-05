@@ -97,8 +97,8 @@ export const InterviewSlotsDialog = () => {
     const totalDurationInMinutes = +durationH * 60 + +durationM;
     const [fromH, fromM] = values.fromTime.split(":");
     const [toH, toM] = values.toTime.split(":");
-    const totalMinutesDuration = (+toH - +fromH) * 60 + (+fromM - +toM);
-    const numOfSlots = Math.round(
+    const totalMinutesDuration = (+toH - +fromH) * 60 + (+toM - +fromM);
+    const numOfSlots = Math.floor(
       totalMinutesDuration / totalDurationInMinutes
     );
 
