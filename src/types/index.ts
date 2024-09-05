@@ -1,6 +1,6 @@
 export enum UserType {
-  TEACHER = "Teacher",
-  PARENT = "Parent",
+  TEACHER = "teacher",
+  PARENT = "parent",
 }
 
 export type DirectusError = {
