@@ -22,7 +22,10 @@ export const TimePicker = ({ defaultTime, onChange }: TimePickerProps) => {
   const handleClick = (type: "hours" | "minutes", time: string) => {
     type === "hours" ? setHours(time) : setMinutes(time);
 
-    onChange && onChange(`${hours}:${minutes}` as Time);
+    onChange &&
+      onChange(
+        `${type === "hours" ? time : hours}:${type === "minutes" ? time : minutes}` as Time
+      );
   };
 
   useEffect(() => {
