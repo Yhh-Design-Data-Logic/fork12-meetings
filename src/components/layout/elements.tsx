@@ -91,7 +91,11 @@ export const PageHeading = () => {
   return <h1 className="text-3xl font-bold text-heading">{pageName}</h1>;
 };
 
-export const LogoutBtn = () => {
+export const LogoutBtn = ({
+  wrapperClassName,
+}: {
+  wrapperClassName?: string;
+}) => {
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
@@ -100,7 +104,13 @@ export const LogoutBtn = () => {
   });
 
   return (
-    <div className="mt-16 md:mt-24">
+    <div
+      className={
+        wrapperClassName
+          ? wrapperClassName
+          : "mt-16 md:fixed md:bottom-8 md:left-4 xl:left-8"
+      }
+    >
       <Button
         className="text-body-light"
         variant="ghost"
