@@ -2,7 +2,7 @@
 
 import { Loader2Icon } from "lucide-react";
 
-import { useParentKids } from "@/hooks";
+import { useChildren } from "@/hooks";
 
 import {
   Accordion,
@@ -11,10 +11,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+
 import { ParentInterviewBookingDialog } from "../_components";
 
 export default function Page() {
-  const { isLoading, data } = useParentKids();
+  const { isLoading, data } = useChildren();
 
   return (
     <div className="container py-10">

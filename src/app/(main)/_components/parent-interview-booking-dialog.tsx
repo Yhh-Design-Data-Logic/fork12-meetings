@@ -46,11 +46,13 @@ export const ParentInterviewBookingDialog = ({
   teacherName,
   trigger,
 }: {
-  teacherId: string;
+  teacherId: string | number;
   teacherName: string;
   trigger: React.ReactElement;
 }) => {
-  const { isLoading, data } = useAvailableInterviewSlotsForTeacher(teacherId);
+  const { isLoading, data } = useAvailableInterviewSlotsForTeacher(
+    String(teacherId)
+  );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
