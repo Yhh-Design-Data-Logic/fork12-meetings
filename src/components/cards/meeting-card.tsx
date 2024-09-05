@@ -12,9 +12,9 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
 
 type BaseMeetingCardProps<E extends React.ElementType> = {
-  id: string;
-  startDate: Date;
-  endDate: Date;
+  id: string | number;
+  startDate: Date | string;
+  endDate: Date | string;
   name: string;
   as?: E;
 };

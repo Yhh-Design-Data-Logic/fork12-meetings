@@ -31,7 +31,7 @@ export default function Home() {
   if (data) {
     const meetingsByDay = data.reduce(
       (groups, meeting) => {
-        const date = meeting.startDate.toISOString().split("T")[0];
+        const date = meeting.startDate.split("T")[0];
         if (!groups[date]) {
           groups[date] = [];
         }
