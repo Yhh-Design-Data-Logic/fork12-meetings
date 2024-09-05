@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { ClockIcon } from "lucide-react";
 
 import { formatDate, isSameDay } from "@/lib/date";
-import { getUserTypeFromCookie } from "@/lib/auth";
+import { getUserSessionFromStorage } from "@/lib/auth";
 import { UserType } from "@/types";
 
 import { Button } from "../ui/button";
@@ -22,7 +22,7 @@ type BaseMeetingCardProps<E extends React.ElementType> = {
 type MeetingCardProps<E extends React.ElementType> = BaseMeetingCardProps<E> &
   Omit<React.ComponentProps<E>, keyof BaseMeetingCardProps<E> | "className">;
 
-const userType = getUserTypeFromCookie();
+const userSession = getUserSessionFromStorage();
 
 export const MeetingCard = <E extends React.ElementType = "div">({
   id,
@@ -50,9 +50,9 @@ export const MeetingCard = <E extends React.ElementType = "div">({
 
         <div className="flex flex-col">
           <span className="text-[9px] uppercase tracking-widest text-green-800">
-            {!userType ? (
+            {!userSession.type ? (
               <Skeleton className="h-2 w-10" />
-            ) : userType === UserType.TEACHER ? (
+            ) : userSession.type === UserType.TEACHER ? (
               "Parent"
             ) : (
               "Teacher"

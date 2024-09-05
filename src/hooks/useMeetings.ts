@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import meetingsApi from "@/api/meetings";
-import { getUserTypeFromCookie } from "@/lib/auth";
+import { getUserSessionFromStorage } from "@/lib/auth";
 import { UserType } from "@/types";
 
 export const useMeetings = () => {
@@ -12,7 +12,7 @@ export const useMeetings = () => {
       data.map((meeting) => ({
         id: meeting.id,
         name:
-          getUserTypeFromCookie() === UserType.PARENT
+          getUserSessionFromStorage().type === UserType.PARENT
             ? meeting.teacher.name
             : meeting.parent.name,
         startDate: meeting.timeslot.start_date,

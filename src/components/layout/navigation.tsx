@@ -2,7 +2,7 @@
 
 import { CalendarIcon, LayoutDashboardIcon } from "lucide-react";
 
-import { getUserTypeFromCookie } from "@/lib/auth";
+import { getUserSessionFromStorage } from "@/lib/auth";
 import { UserType } from "@/types";
 
 import { parentPages, teacherPages } from "./constants";
@@ -18,9 +18,10 @@ type NavigationProps = {
   onNavItemClick?: () => void;
 };
 export const Navigation = ({ className, onNavItemClick }: NavigationProps) => {
-  const userType = getUserTypeFromCookie();
+  const userSession = getUserSessionFromStorage();
 
-  const pages = userType === UserType.PARENT ? parentPages : teacherPages;
+  const pages =
+    userSession.type === UserType.PARENT ? parentPages : teacherPages;
 
   return (
     <div className={className}>

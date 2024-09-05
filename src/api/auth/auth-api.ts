@@ -1,20 +1,27 @@
 import { readMe, withToken } from "@directus/sdk";
 import { apiClient } from "../client/browser";
-import { setUserTypeInCookie, deleteUserTypeFromCookie } from "@/lib/auth";
+import {
+  deleteUserSessionFromStorage,
+  saveUserSessionToStorage,
+} from "@/lib/auth";
 
 async function login({ email, password }: { email: string; password: string }) {
   await apiClient.login(email, password);
 
-  const { type } = await apiClient.request(
+  const user = await apiClient.request(
     withToken(
       (await apiClient.getToken()) ?? "",
       readMe({
-        fields: ["type"],
+        fields: ["type", { teacher: ["id"] }, { parent: ["id"] }],
       })
     )
   );
 
-  setUserTypeInCookie(type);
+  saveUserSessionToStorage({
+    type: user.type,
+    teacher: user.teacher?.id,
+    parent: user.parent?.id,
+  });
 }
 
 async function userProfile() {
@@ -38,7 +45,7 @@ async function userProfile() {
 async function logout() {
   await apiClient.logout();
 
-  deleteUserTypeFromCookie();
+  deleteUserSessionFromStorage();
 }
 
 const authApi = { login, logout, userProfile };
