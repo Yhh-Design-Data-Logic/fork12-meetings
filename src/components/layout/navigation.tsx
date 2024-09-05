@@ -26,7 +26,7 @@ export const Navigation = ({ className, onNavItemClick }: NavigationProps) => {
   return (
     <div className={className}>
       <nav>
-        <ul className="space-y-4 xl:space-y-6">
+        <ul className="space-y-4">
           {pages.map(({ href, icon, title }) => (
             <NavItem
               key={href}

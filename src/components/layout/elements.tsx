@@ -28,11 +28,11 @@ export const NavItem = ({
   const pathname = usePathname();
 
   return (
-    <li onClick={onClick}>
+    <li className="flex rounded-xl hover:bg-primary/10" onClick={onClick}>
       <Link
         href={href}
         className={cn(
-          "inline-flex w-full space-x-2",
+          "inline-flex w-full space-x-2 p-2 lg:p-2.5",
           href === pathname && "text-primary [&>svg]:stroke-primary"
         )}
       >

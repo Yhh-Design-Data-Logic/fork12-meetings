@@ -18,7 +18,7 @@ export const Sidebar = () => {
         </Link>
       </div>
 
-      <Navigation className="p-4 pt-8 xl:px-8" />
+      <Navigation className="p-4 px-2 pt-8 xl:px-4" />
     </aside>
   );
 };
