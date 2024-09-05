@@ -5,8 +5,8 @@ import { formatDate } from "@/lib/date";
 import { Button } from "@/components/ui/button";
 
 type AvailableInterviewSlotProps = {
-  from: Date;
-  to: Date;
+  from: Date | string;
+  to: Date | string;
   onDelete: () => void;
 };
 export const AvailableInterviewSlot = ({

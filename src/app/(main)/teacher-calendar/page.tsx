@@ -2,14 +2,14 @@
 
 import { Loader2Icon } from "lucide-react";
 
-import { useAvailableInterviewSlots } from "@/hooks";
+import { useAvailableMeetingSlots } from "@/hooks";
 
 import { AvailableInterviewSlot } from "@/components/cards";
 
 import { InterviewSlotsDialog } from "../_components";
 
 export default function CalendarPage() {
-  const { isLoading, data } = useAvailableInterviewSlots();
+  const { isLoading, data } = useAvailableMeetingSlots();
 
   return (
     <div className="container py-10">

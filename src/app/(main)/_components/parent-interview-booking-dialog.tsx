@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import { z } from "zod";
 
-import { useAvailableInterviewSlotsForTeacher } from "@/hooks";
+import { useAvailableMeetingSlotsForTeacher } from "@/hooks";
 import { formatDate } from "@/lib/date";
 
 import {
@@ -50,7 +50,7 @@ export const ParentInterviewBookingDialog = ({
   teacherName: string;
   trigger: React.ReactElement;
 }) => {
-  const { isLoading, data } = useAvailableInterviewSlotsForTeacher(
+  const { isLoading, data } = useAvailableMeetingSlotsForTeacher(
     String(teacherId)
   );
 
@@ -138,7 +138,7 @@ export const ParentInterviewBookingDialog = ({
                           <SelectContent>
                             {(data[availableDate] ?? []).map(
                               ({ id, from, to }) => (
-                                <SelectItem key={id} value={id}>
+                                <SelectItem key={id} value={String(id)}>
                                   {formatDate(from, "HH:mm")} -{" "}
                                   {formatDate(to, "HH:mm")}
                                 </SelectItem>
