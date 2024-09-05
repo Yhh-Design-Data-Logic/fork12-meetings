@@ -1,11 +1,15 @@
 "use client";
 
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import { z } from "zod";
 
 import { useAvailableMeetingSlotsForTeacher } from "@/hooks";
+import meetingsApi from "@/api/meetings";
+import { getUserSessionFromStorage } from "@/lib/auth";
 import { formatDate } from "@/lib/date";
 
 import {
@@ -50,9 +54,22 @@ export const ParentInterviewBookingDialog = ({
   teacherName: string;
   trigger: React.ReactElement;
 }) => {
+  const [open, setOpen] = useState(false);
+
+  const userSession = getUserSessionFromStorage();
+
+  const queryClient = useQueryClient();
   const { isLoading, data } = useAvailableMeetingSlotsForTeacher(
     String(teacherId)
   );
+  const createTimeslotsMutation = useMutation({
+    mutationFn: meetingsApi.create,
+    onSuccess: () => {
+      setOpen(false);
+
+      queryClient.invalidateQueries({ queryKey: ["meetings"] });
+    },
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -61,15 +78,20 @@ export const ParentInterviewBookingDialog = ({
       interviewSlot: "",
     },
   });
-
   const availableDate = form.watch("date");
 
   const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
+    if (!("parent" in userSession)) return;
+
+    createTimeslotsMutation.mutate({
+      parentId: userSession.parent,
+      teacherId: +teacherId,
+      timeslotId: +values.interviewSlot,
+    });
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
 
       <DialogContent className="md:max-w-xl">
@@ -153,7 +175,11 @@ export const ParentInterviewBookingDialog = ({
                 </div>
 
                 <div className="flex justify-end">
-                  <Button type="submit" size="lg">
+                  <Button
+                    type="submit"
+                    size="lg"
+                    loading={createTimeslotsMutation.isPending}
+                  >
                     Book
                   </Button>
                 </div>

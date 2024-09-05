@@ -1,4 +1,4 @@
-import { readItems, readMe, withToken } from "@directus/sdk";
+import { createItem, readItems, readMe, withToken } from "@directus/sdk";
 
 import { apiClient } from "../client/browser";
 
@@ -22,5 +22,24 @@ async function getAll() {
   return data;
 }
 
-const meetingsApi = { getAll };
+const create = async (data: {
+  parentId: number;
+  teacherId: number;
+  timeslotId: number;
+}) => {
+  const result = await apiClient.request(
+    withToken(
+      (await apiClient.getToken()) ?? "",
+      createItem("meetings", {
+        teacher: data.teacherId,
+        parent: data.parentId,
+        timeslot: data.timeslotId,
+      })
+    )
+  );
+
+  return result;
+};
+
+const meetingsApi = { getAll, create };
 export default meetingsApi;
