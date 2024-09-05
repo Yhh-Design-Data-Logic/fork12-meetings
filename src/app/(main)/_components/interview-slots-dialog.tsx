@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -67,12 +68,16 @@ function addMinutes(time: string, minsToAdd: string) {
 }
 
 export const InterviewSlotsDialog = () => {
+  const [open, setOpen] = useState(false);
+
   const userSession = getUserSessionFromStorage();
 
   const queryClient = useQueryClient();
   const createTimeslotsMutation = useMutation({
     mutationFn: timeslotsApi.bulkCreate,
     onSuccess: () => {
+      setOpen(false);
+
       queryClient.invalidateQueries({ queryKey: ["available-timeslots"] });
     },
   });
@@ -127,7 +132,7 @@ export const InterviewSlotsDialog = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="lg">Add Interview Slots</Button>
       </DialogTrigger>
