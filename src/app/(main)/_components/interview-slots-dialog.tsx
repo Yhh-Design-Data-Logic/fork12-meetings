@@ -1,8 +1,12 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+
+import timeslotsApi from "@/api/timeslots";
+import { getUserSessionFromStorage } from "@/lib/auth";
 
 import {
   Dialog,
@@ -24,22 +28,55 @@ import {
 } from "@/components/ui/form";
 import { TimeInput, TimePicker } from "./time-input";
 
-const FormSchema = z.object({
-  interviewDate: z.string().min(1, {
-    message: "Required",
-  }),
-  interviewDuration: z.string().min(4, {
-    message: "Required",
-  }),
-  fromTime: z.string().min(4, {
-    message: "Required",
-  }),
-  toTime: z.string().min(4, {
-    message: "Required",
-  }),
-});
+const FormSchema = z
+  .object({
+    interviewDate: z.string().min(1, {
+      message: "Required",
+    }),
+    interviewDuration: z.string().min(4, {
+      message: "Required",
+    }),
+    fromTime: z.string().min(4, {
+      message: "Required",
+    }),
+    toTime: z.string().min(4, {
+      message: "Required",
+    }),
+  })
+  .superRefine((data, ctx) => {
+    const fromH = data.fromTime.split(":")[0];
+    const toH = data.toTime.split(":")[0];
+
+    if (+fromH > +toH) {
+      ctx.addIssue({
+        code: "custom",
+        message: "To must be after From.",
+        path: ["toTime"],
+      });
+    }
+  });
+
+function addMinutes(time: string, minsToAdd: string) {
+  function D(J: number) {
+    return (J < 10 ? "0" : "") + J;
+  }
+  const piece = time.split(":");
+  const mins = +piece[0] * 60 + +piece[1] + +minsToAdd;
+
+  return D(((mins % (24 * 60)) / 60) | 0) + ":" + D(mins % 60);
+}
 
 export const InterviewSlotsDialog = () => {
+  const userSession = getUserSessionFromStorage();
+
+  const queryClient = useQueryClient();
+  const createTimeslotsMutation = useMutation({
+    mutationFn: timeslotsApi.bulkCreate,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["available-timeslots"] });
+    },
+  });
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -49,7 +86,44 @@ export const InterviewSlotsDialog = () => {
   });
 
   const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
+    if (!("teacher" in userSession)) return;
+
+    const [durationH, durationM, _] = values.interviewDuration.split(":");
+    const totalDurationInMinutes = +durationH * 60 + +durationM;
+    const [fromH, fromM] = values.fromTime.split(":");
+    const [toH, toM] = values.toTime.split(":");
+    const totalMinutesDuration = (+toH - +fromH) * 60 + (+fromM - +toM);
+    const numOfSlots = Math.round(
+      totalMinutesDuration / totalDurationInMinutes
+    );
+
+    const data = [];
+
+    for (let i = 0; i < numOfSlots; i++) {
+      // console.log({
+      //   teacher: userSession.teacher,
+      //   startDate: `${values.interviewDate}T${addMinutes(values.fromTime, `${totalDurationInMinutes * i} `)}:00`,
+      //   endDate: `${values.interviewDate}T${addMinutes(
+      //     values.fromTime,
+      //     `${totalDurationInMinutes * (i + 1)} `
+      //   )}:00`,
+      // });
+
+      data.push({
+        teacherId: userSession.teacher,
+        startDate: new Date(
+          `${values.interviewDate}T${addMinutes(values.fromTime, `${totalDurationInMinutes * i} `)}:00`
+        ),
+        endDate: new Date(
+          `${values.interviewDate}T${addMinutes(
+            values.fromTime,
+            `${totalDurationInMinutes * (i + 1)} `
+          )}:00`
+        ),
+      });
+    }
+
+    createTimeslotsMutation.mutate(data);
   };
 
   return (
@@ -111,7 +185,7 @@ export const InterviewSlotsDialog = () => {
                   control={form.control}
                   name="fromTime"
                   render={({ field }) => (
-                    <FormItem className="w-36">
+                    <FormItem className="min-w-36">
                       <FormLabel>From</FormLabel>
                       <FormControl>
                         <TimePicker defaultTime="10:00" {...field} />
@@ -125,7 +199,7 @@ export const InterviewSlotsDialog = () => {
                   control={form.control}
                   name="toTime"
                   render={({ field }) => (
-                    <FormItem className="w-36">
+                    <FormItem className="min-w-36">
                       <FormLabel>To</FormLabel>
                       <FormControl>
                         <TimePicker defaultTime="12:00" {...field} />
@@ -137,7 +211,12 @@ export const InterviewSlotsDialog = () => {
               </div>
 
               <div>
-                <Button type="submit" className="w-full" size="lg">
+                <Button
+                  type="submit"
+                  className="w-full"
+                  size="lg"
+                  loading={createTimeslotsMutation.isPending}
+                >
                   Submit
                 </Button>
               </div>

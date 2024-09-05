@@ -1,8 +1,10 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 
 import { useAvailableMeetingSlots } from "@/hooks";
+import timeslotsApi from "@/api/timeslots";
 
 import { AvailableInterviewSlot } from "@/components/cards";
 
@@ -10,6 +12,14 @@ import { InterviewSlotsDialog } from "../_components";
 
 export default function CalendarPage() {
   const { isLoading, data } = useAvailableMeetingSlots();
+
+  const queryClient = useQueryClient();
+  const deleteTimeslotMutation = useMutation({
+    mutationFn: timeslotsApi.delete,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["available-timeslots"] });
+    },
+  });
 
   return (
     <div className="container py-10">
@@ -33,7 +43,7 @@ export default function CalendarPage() {
                 <AvailableInterviewSlot
                   from={slot.from}
                   to={slot.to}
-                  onDelete={() => {}}
+                  onDelete={() => deleteTimeslotMutation.mutate(slot.id)}
                 />
               </li>
             ))}
