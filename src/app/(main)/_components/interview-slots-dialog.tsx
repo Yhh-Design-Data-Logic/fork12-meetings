@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { useAvailableMeetingSlots } from "@/hooks";
 import timeslotsApi from "@/api/timeslots";
 import { getUserSessionFromStorage } from "@/lib/auth";
 
@@ -45,10 +47,18 @@ const FormSchema = z
     }),
   })
   .superRefine((data, ctx) => {
-    const fromH = data.fromTime.split(":")[0];
-    const toH = data.toTime.split(":")[0];
+    const [fromH, fromM] = data.fromTime.split(":");
+    const [toH, toM] = data.toTime.split(":");
 
     if (+fromH > +toH) {
+      ctx.addIssue({
+        code: "custom",
+        message: "To must be after From.",
+        path: ["toTime"],
+      });
+    }
+
+    if (+fromH === +toH && +fromM >= +toM) {
       ctx.addIssue({
         code: "custom",
         message: "To must be after From.",
@@ -81,6 +91,8 @@ export const InterviewSlotsDialog = () => {
       queryClient.invalidateQueries({ queryKey: ["available-timeslots"] });
     },
   });
+
+  const { data: availableMeetingSlots } = useAvailableMeetingSlots();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -126,6 +138,29 @@ export const InterviewSlotsDialog = () => {
           )}:00`
         ),
       });
+    }
+
+    if (data.length === 0) return;
+
+    if (data[0].startDate.getTime() < Date.now()) {
+      toast.error("Can't create timeslots in the past");
+      return;
+    }
+
+    let hasConflictWithExistingAvailableTimeslots = false;
+
+    if (availableMeetingSlots) {
+      hasConflictWithExistingAvailableTimeslots = data.some((newTs) =>
+        availableMeetingSlots.some(
+          (ts) => newTs.startDate.getTime() <= new Date(ts.to).getTime()
+        )
+      );
+    }
+
+    if (hasConflictWithExistingAvailableTimeslots) {
+      toast.error("There's a Conflict with your current available timeslots.");
+
+      return;
     }
 
     createTimeslotsMutation.mutate(data);
