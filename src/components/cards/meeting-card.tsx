@@ -84,7 +84,7 @@ export const MeetingCard = <E extends React.ElementType = "div">({
       <div className="flex items-center px-4 md:px-8">
         <Button
           variant="outline"
-          onClick={() => router.push(`/meeting/${id}`)}
+          onClick={() => router.push(`/meeting-room/${id}`)}
           disabled={!isSameDay(startDate)}
         >
           Join
