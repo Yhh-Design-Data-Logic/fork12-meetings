@@ -20,21 +20,23 @@ export const useAvailableMeetingSlotsForTeacher = (teacherId: string) => {
     queryKey: ["teacher-available-timeslots", teacherId],
     queryFn: () => timeslotsApi.getAvailable(teacherId),
     select: (data) => {
-      return data?.reduce(
-        (groups, timeslot) => {
-          const date = timeslot.start_date.split("T")[0];
-          if (!groups[date]) {
-            groups[date] = [];
-          }
-          groups[date].push({
-            id: timeslot.id,
-            from: timeslot.start_date,
-            to: timeslot.end_date,
-          });
-          return groups;
-        },
-        {} as Record<string, { id: number; from: string; to: string }[]>
-      );
+      return data
+        .filter((d) => new Date(d.start_date) > new Date())
+        .reduce(
+          (groups, timeslot) => {
+            const date = timeslot.start_date.split("T")[0];
+            if (!groups[date]) {
+              groups[date] = [];
+            }
+            groups[date].push({
+              id: timeslot.id,
+              from: timeslot.start_date,
+              to: timeslot.end_date,
+            });
+            return groups;
+          },
+          {} as Record<string, { id: number; from: string; to: string }[]>
+        );
     },
   });
 };
