@@ -11,6 +11,14 @@ export const useMeetings = () => {
     select: (data) => {
       return data
         .filter((m) => Boolean(m.timeslot))
+        .sort((a, b) => {
+          const dateA = new Date(a.timeslot.start_date);
+          const dateB = new Date(b.timeslot.start_date);
+
+          if (dateA < dateB) return -1;
+          if (dateA > dateB) return 1;
+          return 0;
+        })
         .map((meeting) => ({
           id: meeting.id,
           name:
