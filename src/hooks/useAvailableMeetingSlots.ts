@@ -1,17 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 
 import timeslotsApi from "@/api/timeslots";
+import { sortByDate } from "@/lib/array";
 
 export const useAvailableMeetingSlots = () => {
   return useQuery({
     queryKey: ["available-timeslots"],
     queryFn: () => timeslotsApi.getAvailable(),
     select: (data) =>
-      data.map((timeslot) => ({
-        id: timeslot.id,
-        from: timeslot.start_date,
-        to: timeslot.end_date,
-      })),
+      data
+        .map((timeslot) => ({
+          id: timeslot.id,
+          from: timeslot.start_date,
+          to: timeslot.end_date,
+        }))
+        .sort((a, b) => sortByDate(a.from, b.from)),
   });
 };
 
