@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 
 import Providers from "../providerst";
+import { roboto } from "../_fonts";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-background text-body`}>
+      <body
+        className={`${roboto.variable} font-roboto bg-background text-body`}
+      >
         <Toaster />
         <Providers>{children}</Providers>
       </body>

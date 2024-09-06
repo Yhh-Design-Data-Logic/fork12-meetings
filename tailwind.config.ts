@@ -34,6 +34,10 @@ const config: Config = {
           light: "hsl(var(--body-light) / <alpha-value>) /* #6d7378 */",
         },
       },
+      fontFamily: {
+        roboto: ["var(--font-roboto)"],
+        mono: ["var(--font-roboto-mono)"],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

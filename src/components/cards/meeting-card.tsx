@@ -30,7 +30,6 @@ export const MeetingCard = <E extends React.ElementType = "div">({
   endDate,
   name,
   as,
-
   ...otherProps
 }: MeetingCardProps<E>) => {
   const router = useRouter();
@@ -49,7 +48,7 @@ export const MeetingCard = <E extends React.ElementType = "div">({
         </Avatar>
 
         <div className="flex flex-col">
-          <span className="text-[9px] uppercase tracking-widest text-green-800">
+          <span className="text-[9px] font-medium uppercase tracking-widest text-green-800">
             {!userSession.type ? (
               <Skeleton className="h-2 w-10" />
             ) : userSession.type === UserType.TEACHER ? (
@@ -58,7 +57,7 @@ export const MeetingCard = <E extends React.ElementType = "div">({
               "Teacher"
             )}
           </span>
-          <span className="w-[10ch] overflow-hidden whitespace-nowrap">
+          <span className="w-[10ch] overflow-hidden whitespace-nowrap font-mono">
             {name.length > 12 ? name.substring(0, 12) + ".." : name}
           </span>
         </div>
