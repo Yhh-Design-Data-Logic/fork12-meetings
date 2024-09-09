@@ -1,9 +1,11 @@
 "use client";
 
+import { withErrorBoundary } from "react-error-boundary";
 import { Loader2Icon } from "lucide-react";
 
 import { useChildren } from "@/hooks";
 
+import { ErrorBoundaryPageFallback } from "@/components/error";
 import {
   Accordion,
   AccordionContent,
@@ -14,7 +16,7 @@ import { Button } from "@/components/ui/button";
 
 import { ParentInterviewBookingDialog } from "../_components";
 
-export default function Page() {
+function ParentCalendarPage() {
   const { isLoading, data } = useChildren();
 
   return (
@@ -73,3 +75,7 @@ export default function Page() {
     </div>
   );
 }
+
+export default withErrorBoundary(ParentCalendarPage, {
+  FallbackComponent: ErrorBoundaryPageFallback,
+});

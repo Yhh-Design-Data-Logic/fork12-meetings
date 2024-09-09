@@ -1,13 +1,19 @@
 "use client";
 
+import { withErrorBoundary } from "react-error-boundary";
+
 import { useMeetings } from "@/hooks";
 import { formatDate, isSameDay } from "@/lib/date";
+import { getUserSessionFromStorage } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
+import { ErrorBoundaryPageFallback } from "@/components/error";
 import { MeetingCard, MeetingCardSkeleton } from "@/components/cards";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function Home() {
+function HomePage() {
+  const userSession = getUserSessionFromStorage();
+
   const { isLoading, data } = useMeetings();
 
   if (isLoading) {
@@ -62,6 +68,7 @@ export default function Home() {
                   startDate={meeting.startDate}
                   endDate={meeting.endDate}
                   name={meeting.name}
+                  userType={userSession.type}
                   as="li"
                 />
               ))}
@@ -72,3 +79,7 @@ export default function Home() {
     );
   }
 }
+
+export default withErrorBoundary(HomePage, {
+  FallbackComponent: ErrorBoundaryPageFallback,
+});

@@ -2,6 +2,8 @@
 
 import { CalendarIcon, LayoutDashboardIcon } from "lucide-react";
 
+import { withErrorBoundary } from "react-error-boundary";
+
 import { getUserSessionFromStorage } from "@/lib/auth";
 import { UserType } from "@/types";
 
@@ -17,29 +19,32 @@ type NavigationProps = {
   className?: string;
   onNavItemClick?: () => void;
 };
-export const Navigation = ({ className, onNavItemClick }: NavigationProps) => {
-  const userSession = getUserSessionFromStorage();
+export const Navigation = withErrorBoundary(
+  ({ className, onNavItemClick }: NavigationProps) => {
+    const userSession = getUserSessionFromStorage();
 
-  const pages =
-    userSession.type === UserType.PARENT ? parentPages : teacherPages;
+    const pages =
+      userSession.type === UserType.PARENT ? parentPages : teacherPages;
 
-  return (
-    <div className={className}>
-      <nav>
-        <ul className="space-y-4">
-          {pages.map(({ href, icon, title }) => (
-            <NavItem
-              key={href}
-              href={href}
-              text={title}
-              icon={iconsMapper[icon]}
-              onClick={onNavItemClick}
-            />
-          ))}
-        </ul>
-      </nav>
+    return (
+      <div className={className}>
+        <nav>
+          <ul className="space-y-4">
+            {pages.map(({ href, icon, title }) => (
+              <NavItem
+                key={href}
+                href={href}
+                text={title}
+                icon={iconsMapper[icon]}
+                onClick={onNavItemClick}
+              />
+            ))}
+          </ul>
+        </nav>
 
-      <LogoutBtn />
-    </div>
-  );
-};
+        <LogoutBtn />
+      </div>
+    );
+  },
+  { fallback: null }
+);

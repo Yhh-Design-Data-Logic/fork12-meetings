@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { UserType } from "@/types";
 import clientSideCookieStorage from "./cookie-client-side";
+import { UserSessionNotFoundError } from "./error";
 
 export const validateAuth = (data: {}) => {
   if (
@@ -40,7 +41,7 @@ export const getUserSessionFromStorage = () => {
     "fork12-conference-user"
   );
 
-  if (!userSession) throw new Error("User session not found in storage.");
+  if (!userSession) throw new UserSessionNotFoundError();
 
   return JSON.parse(userSession) as
     | { type: UserType.PARENT; parent: number }

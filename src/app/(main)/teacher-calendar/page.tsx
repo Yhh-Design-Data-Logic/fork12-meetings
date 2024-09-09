@@ -1,16 +1,18 @@
 "use client";
 
+import { withErrorBoundary } from "react-error-boundary";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 
 import { useAvailableMeetingSlots } from "@/hooks";
 import timeslotsApi from "@/api/timeslots";
 
+import { ErrorBoundaryPageFallback } from "@/components/error";
 import { AvailableInterviewSlot } from "@/components/cards";
 
 import { InterviewSlotsDialog } from "../_components";
 
-export default function CalendarPage() {
+function CalendarPage() {
   const { isLoading, data } = useAvailableMeetingSlots();
 
   const queryClient = useQueryClient();
@@ -55,3 +57,7 @@ export default function CalendarPage() {
     </div>
   );
 }
+
+export default withErrorBoundary(CalendarPage, {
+  FallbackComponent: ErrorBoundaryPageFallback,
+});
