@@ -231,7 +231,7 @@ export const InterviewSlotsDialog = () => {
                       <FormControl>
                         <Input
                           type="date"
-                          className="rounded-none border-0 border-b focus-visible:ring-0 focus-visible:ring-offset-0"
+                          className="block rounded-none border-0 border-b focus-visible:ring-0 focus-visible:ring-offset-0"
                           min={new Date().toISOString().split("T")[0]}
                           {...field}
                         />
