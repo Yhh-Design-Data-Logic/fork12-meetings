@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { withErrorBoundary } from "react-error-boundary";
 
 import { useMeetings } from "@/hooks";
-import { formatDate, isSameDay } from "@/lib/date";
+import { formatDate, isSameDay, isSameDayAndAfter } from "@/lib/date";
 import { getUserSessionFromStorage } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
@@ -39,7 +39,7 @@ function HomePage() {
       meetingsByDay &&
       Object.entries(meetingsByDay).reduce(
         (acc, curr) => {
-          if (isSameDay(curr[0])) {
+          if (isSameDayAndAfter(curr[0])) {
             acc.upcoming.push({ [curr[0]]: curr[1] });
           } else {
             acc.past.push({ [curr[0]]: curr[1] });
