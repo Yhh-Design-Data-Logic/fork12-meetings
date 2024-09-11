@@ -40,6 +40,7 @@ const FormSchema = z
     interviewDuration: z.string().min(4, {
       message: "Required",
     }),
+    breakTime: z.coerce.number(),
     fromTime: z.string().min(4, {
       message: "Required",
     }),
@@ -64,6 +65,22 @@ const FormSchema = z
         code: "custom",
         message: "To must be after From.",
         path: ["toTime"],
+      });
+    }
+
+    if (data.breakTime < 0 || data.breakTime % 1 !== 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Invalid",
+        path: ["breakTime"],
+      });
+    }
+
+    if (data.breakTime >= (+toH - +fromH) * 60 + (+toM - +fromM)) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Too much",
+        path: ["breakTime"],
       });
     }
   });
@@ -100,11 +117,14 @@ export const InterviewSlotsDialog = () => {
     defaultValues: {
       interviewDate: "",
       interviewDuration: "",
+      breakTime: 5,
     },
   });
 
   const onSubmit = (values: z.infer<typeof FormSchema>) => {
     if (!("teacher" in userSession)) return;
+
+    const maxEndDate = new Date(`${values.interviewDate}T${values.toTime}:00`);
 
     const [durationH, durationM, _] = values.interviewDuration.split(":");
     const totalDurationInMinutes = +durationH * 60 + +durationM;
@@ -118,27 +138,24 @@ export const InterviewSlotsDialog = () => {
     const data = [];
 
     for (let i = 0; i < numOfSlots; i++) {
-      // console.log({
-      //   teacher: userSession.teacher,
-      //   startDate: `${values.interviewDate}T${addMinutes(values.fromTime, `${totalDurationInMinutes * i} `)}:00`,
-      //   endDate: `${values.interviewDate}T${addMinutes(
-      //     values.fromTime,
-      //     `${totalDurationInMinutes * (i + 1)} `
-      //   )}:00`,
-      // });
+      const startDate = new Date(
+        `${values.interviewDate}T${addMinutes(values.fromTime, `${totalDurationInMinutes * i + i * values.breakTime} `)}:00`
+      );
 
-      data.push({
-        teacherId: userSession.teacher,
-        startDate: new Date(
-          `${values.interviewDate}T${addMinutes(values.fromTime, `${totalDurationInMinutes * i} `)}:00`
-        ),
-        endDate: new Date(
-          `${values.interviewDate}T${addMinutes(
-            values.fromTime,
-            `${totalDurationInMinutes * (i + 1)} `
-          )}:00`
-        ),
-      });
+      const endDate = new Date(
+        `${values.interviewDate}T${addMinutes(
+          values.fromTime,
+          `${totalDurationInMinutes * (i + 1) + i * values.breakTime} `
+        )}:00`
+      );
+
+      if (endDate.getTime() <= maxEndDate.getTime()) {
+        data.push({
+          teacherId: userSession.teacher,
+          startDate: startDate,
+          endDate: endDate,
+        });
+      }
     }
 
     if (data.length === 0) return;
@@ -218,6 +235,33 @@ export const InterviewSlotsDialog = () => {
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div>
+                <FormField
+                  control={form.control}
+                  name="breakTime"
+                  render={({ field }) => (
+                    <FormItem className="w-36">
+                      <FormLabel>Break Time</FormLabel>
+                      <div className="relative">
+                        <FormControl>
+                          <Input
+                            type="number"
+                            className="h-10 rounded-none border-0 border-b pe-12 focus-visible:ring-0 focus-visible:ring-offset-0"
+                            min={0}
+                            step={1}
+                            {...field}
+                          />
+                        </FormControl>
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm">
+                          Mins
+                        </span>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
