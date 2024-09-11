@@ -19,6 +19,7 @@ export const validateAuth = (data: {}) => {
 
 export const saveUserSessionToStorage = (user: {
   type: string;
+  name: string;
   parent?: number | null;
   teacher?: number | null;
 }) => {
@@ -31,6 +32,7 @@ export const saveUserSessionToStorage = (user: {
     "fork12-conference-user",
     JSON.stringify({
       type: validatedUserType,
+      name: user.name,
       ...(user.teacher && { teacher: user.teacher }),
       ...(user.parent && { parent: user.parent }),
     })
@@ -44,8 +46,8 @@ export const getUserSessionFromStorage = () => {
   if (!userSession) throw new UserSessionNotFoundError();
 
   return JSON.parse(userSession) as
-    | { type: UserType.PARENT; parent: number }
-    | { type: UserType.TEACHER; teacher: number };
+    | { type: UserType.PARENT; name: string; parent: number }
+    | { type: UserType.TEACHER; name: string; teacher: number };
 };
 export const deleteUserSessionFromStorage = () => {
   clientSideCookieStorage.deleteCookie("fork12-conference-user");

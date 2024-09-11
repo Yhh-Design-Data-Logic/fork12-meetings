@@ -12,12 +12,13 @@ async function login({ email, password }: { email: string; password: string }) {
     withToken(
       (await apiClient.getToken()) ?? "",
       readMe({
-        fields: ["type", { teacher: ["id"] }, { parent: ["id"] }],
+        fields: ["first_name", "type", { teacher: ["id"] }, { parent: ["id"] }],
       })
     )
   );
 
   saveUserSessionToStorage({
+    name: user.first_name ?? "-",
     type: user.type,
     teacher: user.teacher?.id,
     parent: user.parent?.id,
