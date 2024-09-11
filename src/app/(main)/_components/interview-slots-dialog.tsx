@@ -207,7 +207,7 @@ export const InterviewSlotsDialog = () => {
         <div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="md:flex md:space-x-12">
+              <div className="md:grid md:grid-cols-2 md:gap-x-16">
                 <FormField
                   control={form.control}
                   name="interviewDuration"
@@ -242,12 +242,12 @@ export const InterviewSlotsDialog = () => {
                 />
               </div>
 
-              <div>
+              <div className="md:grid md:grid-cols-2 md:gap-x-16">
                 <FormField
                   control={form.control}
                   name="breakTime"
                   render={({ field }) => (
-                    <FormItem className="w-36">
+                    <FormItem>
                       <FormLabel>Break Time</FormLabel>
                       <div className="relative">
                         <FormControl>
@@ -269,7 +269,7 @@ export const InterviewSlotsDialog = () => {
                 />
               </div>
 
-              <div className="md:flex md:space-x-12">
+              <div className="md:grid md:grid-cols-2 md:gap-x-16">
                 <FormField
                   control={form.control}
                   name="fromTime"
