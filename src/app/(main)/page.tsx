@@ -76,7 +76,7 @@ function HomePage() {
 
   if (meetingsByCategory) {
     return (
-      <div className="container space-y-8 py-10">
+      <div className="container py-10">
         <Tabs
           value={category}
           onValueChange={(value) => setCategory(value as typeof category)}
@@ -92,7 +92,7 @@ function HomePage() {
               Past
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="upcoming">
+          <TabsContent className="space-y-8" value="upcoming">
             {meetingsByCategory.upcoming.map((item) =>
               Object.keys(item).map((date) => (
                 <div key={date}>
@@ -122,7 +122,7 @@ function HomePage() {
               ))
             )}
           </TabsContent>
-          <TabsContent value="past">
+          <TabsContent className="space-y-8" value="past">
             {meetingsByCategory.past.map((item) =>
               Object.keys(item).map((date) => (
                 <div key={date}>
