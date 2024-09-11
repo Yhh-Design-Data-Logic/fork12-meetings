@@ -1,4 +1,4 @@
-import { createItem, readItems, readMe, withToken } from "@directus/sdk";
+import { createItem, readItems, withToken, triggerFlow } from "@directus/sdk";
 
 import { apiClient } from "../client/browser";
 
@@ -41,5 +41,25 @@ const create = async (data: {
   return result;
 };
 
-const meetingsApi = { getAll, create };
+const getMeetingRoomToken = async (meetingId: number) => {
+  const result = await apiClient.request<{
+    app_id: number;
+    effectiveTimeInSeconds: number;
+    token: string;
+    room_id: string;
+    user_id: string;
+    username?: string;
+  }>(
+    withToken(
+      (await apiClient.getToken()) ?? "",
+      triggerFlow("POST", "9edbd580-b370-4790-8c33-b2ed85ee3199", {
+        meeting: `${meetingId}`,
+      })
+    )
+  );
+
+  return result;
+};
+
+const meetingsApi = { getAll, create, getMeetingRoomToken };
 export default meetingsApi;
