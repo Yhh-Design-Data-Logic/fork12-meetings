@@ -20,7 +20,7 @@ export const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
     const id = useId();
 
     const [hours, setHours] = useState("00");
-    const [minutes, setMinutes] = useState("30");
+    const [minutes, setMinutes] = useState("05");
     const [seconds, setSeconds] = useState("00");
 
     useEffect(() => {
