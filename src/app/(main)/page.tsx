@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { withErrorBoundary } from "react-error-boundary";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { useMeetings } from "@/hooks";
 import { formatDate, isSameDay, isSameDayAndAfter } from "@/lib/date";
@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MeetingCard, MeetingCardSkeleton } from "@/components/cards";
 
-function HomePage() {
+function HomePageComponent() {
   const [category, setCategory] = useState<"upcoming" | "past">("upcoming");
 
   const userSession = getUserSessionFromStorage();
@@ -158,6 +158,10 @@ function HomePage() {
   }
 }
 
-export default withErrorBoundary(HomePage, {
-  FallbackComponent: ErrorBoundaryPageFallback,
-});
+export default function HomePage() {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorBoundaryPageFallback}>
+      <HomePageComponent />
+    </ErrorBoundary>
+  );
+}
