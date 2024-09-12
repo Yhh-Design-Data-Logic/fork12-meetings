@@ -1,11 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 
 import meetingsApi from "@/api/meetings";
+import { UserSessionNotFoundError } from "@/lib/error";
 import { getUserSessionFromStorage } from "@/lib/auth";
 import { sortByDate } from "@/lib/array";
 import { UserType } from "@/types";
 
 export const useMeetings = () => {
+  const userSession = getUserSessionFromStorage();
+
+  if (!userSession) throw new UserSessionNotFoundError();
+
   return useQuery({
     queryKey: ["meetings"],
     queryFn: meetingsApi.getAll,
@@ -18,7 +23,7 @@ export const useMeetings = () => {
         .map((meeting) => ({
           id: meeting.id,
           name:
-            getUserSessionFromStorage().type === UserType.PARENT
+            userSession.type === UserType.PARENT
               ? meeting.teacher.name
               : meeting.parent.name,
           startDate: meeting.timeslot.start_date,
