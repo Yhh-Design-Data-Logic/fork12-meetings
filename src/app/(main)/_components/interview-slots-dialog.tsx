@@ -172,8 +172,10 @@ export const InterviewSlotsDialog = () => {
         availableMeetingSlots.some((ts, idx) => {
           return (
             isSameDay(newTs.startDate, ts.to) &&
-            newTs.startDate.getTime() >= new Date(ts.from).getTime() &&
-            newTs.startDate.getTime() <= new Date(ts.to).getTime()
+            // start1 < end2
+            newTs.startDate.getTime() <= new Date(ts.to).getTime() &&
+            //  start2 < end1
+            new Date(ts.from).getTime() <= newTs.endDate.getTime()
           );
         })
       );
