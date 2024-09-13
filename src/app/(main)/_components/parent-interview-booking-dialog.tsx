@@ -5,12 +5,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
+import { toast } from "sonner";
 import { z } from "zod";
 
-import { useAvailableMeetingSlotsForTeacher } from "@/hooks";
+import { useAvailableMeetingSlotsForTeacher, useMeetings } from "@/hooks";
 import meetingsApi from "@/api/meetings";
 import { getUserSessionFromStorage } from "@/lib/auth";
-import { formatDate } from "@/lib/date";
+import { formatDate, hasTimeConflict } from "@/lib/date";
 
 import {
   Dialog,
@@ -62,6 +63,8 @@ export const ParentInterviewBookingDialog = ({
   const { isLoading, data } = useAvailableMeetingSlotsForTeacher(
     String(teacherId)
   );
+  const { data: meetings } = useMeetings();
+
   const createTimeslotsMutation = useMutation({
     mutationFn: meetingsApi.create,
     onSuccess: () => {
@@ -85,6 +88,28 @@ export const ParentInterviewBookingDialog = ({
 
   const onSubmit = (values: z.infer<typeof FormSchema>) => {
     if (!("parent" in userSession)) return;
+
+    // check for time conflict
+    if (meetings) {
+      const meetingTimeslot = Object.values(data!)
+        .flat()
+        .find((ts) => ts.id === +values.interviewSlot)!;
+
+      if (
+        meetings.some((m) =>
+          hasTimeConflict(
+            new Date(meetingTimeslot.from),
+            new Date(meetingTimeslot.to),
+            new Date(m.startDate),
+            new Date(m.endDate)
+          )
+        )
+      ) {
+        toast.error("There's a Conflict with your current meetings.");
+
+        return;
+      }
+    }
 
     createTimeslotsMutation.mutate({
       parentId: userSession.parent,
