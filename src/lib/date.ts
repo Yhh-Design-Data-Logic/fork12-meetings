@@ -38,3 +38,18 @@ export const msToTime = (duration: number) => {
 
   return hours + ":" + minutes + ":" + seconds;
 };
+
+export const hasTimeConflict = (
+  timeslotStartDate1: Date,
+  timeslotEndDate1: Date,
+  timeslotStartDate2: Date,
+  timeslotEndDate2: Date
+) => {
+  return (
+    isSameDay(timeslotStartDate1, timeslotStartDate2) &&
+    // start1 < end2
+    timeslotStartDate1 <= timeslotEndDate2 &&
+    //  start2 < end1
+    timeslotStartDate2 <= timeslotEndDate1
+  );
+};

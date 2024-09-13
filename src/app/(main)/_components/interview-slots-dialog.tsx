@@ -10,7 +10,7 @@ import { z } from "zod";
 import { useAvailableMeetingSlots } from "@/hooks";
 import timeslotsApi from "@/api/timeslots";
 import { getUserSessionFromStorage } from "@/lib/auth";
-import { isSameDay } from "@/lib/date";
+import { hasTimeConflict } from "@/lib/date";
 
 import {
   Dialog,
@@ -169,13 +169,12 @@ export const InterviewSlotsDialog = () => {
 
     if (availableMeetingSlots) {
       hasConflictWithExistingAvailableTimeslots = data.some((newTs) =>
-        availableMeetingSlots.some((ts, idx) => {
-          return (
-            isSameDay(newTs.startDate, ts.to) &&
-            // start1 < end2
-            newTs.startDate.getTime() <= new Date(ts.to).getTime() &&
-            //  start2 < end1
-            new Date(ts.from).getTime() <= newTs.endDate.getTime()
+        availableMeetingSlots.some((ts) => {
+          return hasTimeConflict(
+            newTs.startDate,
+            newTs.endDate,
+            new Date(ts.from),
+            new Date(ts.to)
           );
         })
       );
