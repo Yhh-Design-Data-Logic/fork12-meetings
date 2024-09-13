@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { Loader } from "lucide-react";
+import { Loader, VideoIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { formatDate, isTimeBeforeNow, msToTime } from "@/lib/date";
@@ -197,12 +197,33 @@ export default function MeetingRoomPage() {
             {data?.map((m, idx) => (
               <li
                 className={cn(
-                  "p-2 text-center",
+                  "flex flex-col p-2 text-center",
                   m.id === currentMeeting?.id && "bg-primary text-white"
                 )}
                 key={idx}
               >
-                Meeting {idx + 1}
+                <span className="flex items-center">
+                  <VideoIcon
+                    size={16}
+                    className={cn(
+                      "mr-1.5 text-primary",
+                      m.id === currentMeeting?.id && "text-secondary"
+                    )}
+                  />
+                  Meeting {idx + 1}
+                </span>
+
+                <span className="self-start text-xs">
+                  <span
+                    className={cn(
+                      "text-primary",
+                      m.id === currentMeeting?.id && "text-secondary"
+                    )}
+                  >
+                    With
+                  </span>{" "}
+                  {m.name}
+                </span>
               </li>
             ))}
           </ul>
