@@ -9,6 +9,8 @@ function setCookie(name: string, value: string, options?: { expires: Date }) {
 }
 
 function getCookie(name: string) {
+  if (typeof document === "undefined") return null;
+
   const nameEQ = name + "=";
   const ca = document.cookie.split(";");
   for (let i = 0; i < ca.length; i++) {

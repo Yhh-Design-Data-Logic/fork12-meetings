@@ -43,9 +43,10 @@ export const getUserSessionFromStorage = () => {
     "fork12-conference-user"
   );
 
-  if (!userSession) throw new UserSessionNotFoundError();
+  if (!userSession && typeof window !== "undefined")
+    throw new UserSessionNotFoundError();
 
-  return JSON.parse(userSession) as
+  return JSON.parse(typeof window === "undefined" ? "{}" : userSession!) as
     | { type: UserType.PARENT; name: string; parent: number }
     | { type: UserType.TEACHER; name: string; teacher: number };
 };
