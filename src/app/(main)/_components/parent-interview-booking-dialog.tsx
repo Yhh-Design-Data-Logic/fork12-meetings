@@ -68,6 +68,9 @@ export const ParentInterviewBookingDialog = ({
       setOpen(false);
 
       queryClient.invalidateQueries({ queryKey: ["meetings"] });
+      queryClient.invalidateQueries({
+        queryKey: ["teacher-available-timeslots"],
+      });
     },
   });
 
