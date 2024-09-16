@@ -11,7 +11,7 @@ export const validateAuth = (data: {}) => {
     typeof data.access_token === "string" &&
     typeof data.expires_at === "number"
   ) {
-    if (data.expires_at > Date.now()) return true;
+    return true;
   }
 
   return false;
