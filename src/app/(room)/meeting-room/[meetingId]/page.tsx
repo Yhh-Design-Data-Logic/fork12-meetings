@@ -192,8 +192,8 @@ export default function MeetingRoomPage() {
         </Button>
       </header>
 
-      <div className="relative flex grow">
-        <aside className="absolute bottom-0 left-0 top-0 w-36 overflow-y-auto border-r border-zinc-200 xl:w-40">
+      <div className="relative grow md:flex">
+        <aside className="absolute bottom-0 left-0 top-0 hidden w-36 overflow-y-auto border-r border-zinc-200 md:block xl:w-40">
           <ul className="space-y-2 py-4">
             {data?.map((m, idx) => (
               <li
@@ -230,7 +230,7 @@ export default function MeetingRoomPage() {
           </ul>
         </aside>
 
-        <main className="flex grow items-center justify-center pl-36 xl:pl-40">
+        <main className="flex items-center justify-center md:grow md:pl-36 xl:pl-40">
           {isLoading ? (
             <div>
               <Loader
