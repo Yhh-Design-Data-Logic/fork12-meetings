@@ -40,17 +40,17 @@ export default function MeetingRoomPage() {
 
   const { isLoading, data } = useSuccessiveMeetings(meetingId as string);
 
-  const [currentMeeting, setCurrentMeeting] = useState<{
-    id: number;
-    startDate: Date;
-    endDate: Date;
-  } | null>(null);
   const [allMeetingsDone, setAllMeetingsDone] = useState(false);
 
-  console.log(meetingId);
+  // console.log(meetingId);
 
   const meetingManager = () => {
     let textInfo = "";
+    let currentMeeting: {
+      id: number;
+      startDate: Date;
+      endDate: Date;
+    } | null = null;
 
     const meetings = data ?? [];
 
@@ -110,7 +110,7 @@ export default function MeetingRoomPage() {
         setAllMeetingsDone(true);
       }
 
-      return { textInfo };
+      return { textInfo, currentMeeting };
     }
 
     const currentMeetingStartDate = new Date(
@@ -121,12 +121,11 @@ export default function MeetingRoomPage() {
     );
 
     if (!currentMeeting) {
-      console.log("set currentMeeting");
-      setCurrentMeeting({
+      currentMeeting = {
         id: meetings[currentMeetingIndex].id,
         startDate: currentMeetingStartDate,
         endDate: currentMeetingEndDate,
-      });
+      };
     }
 
     // if current meeting start time has not come yet
@@ -166,8 +165,10 @@ export default function MeetingRoomPage() {
     ) {
       if (!allMeetingsDone) setAllMeetingsDone(true);
     }
-    return { textInfo };
+    return { textInfo, currentMeeting };
   };
+
+  const currentMeeting = meetingManager().currentMeeting;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -243,7 +244,7 @@ export default function MeetingRoomPage() {
               All meetings have finished
             </p>
           ) : (
-            currentMeeting && <MeetingRoom {...currentMeeting} />
+            !!currentMeeting && <MeetingRoom {...currentMeeting} />
           )}
         </main>
       </div>
