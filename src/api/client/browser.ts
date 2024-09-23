@@ -7,7 +7,7 @@ const storage = new LocalStorage();
 
 export const apiClient = createDirectus<Schema>(process.env.NEXT_PUBLIC_API_URL)
   .with(
-    authentication("cookie", {
+    authentication("json", {
       credentials: "include",
       autoRefresh: true,
       storage,
