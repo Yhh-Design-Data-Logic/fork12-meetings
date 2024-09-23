@@ -20,7 +20,7 @@ export const MobileMenu = () => {
 
       <Drawer open={open} onOpenChange={setOpen} direction="left" modal={false}>
         <DrawerContent
-          className="inset-x-auto left-0 min-h-screen w-4/5 rounded-none border-l-0 border-r border-zinc-200 pt-[var(--header-area-height)]"
+          className="inset-x-auto left-0 min-h-full w-4/5 rounded-none border-l-0 border-r border-zinc-200 pt-[var(--header-area-height)]"
           direction="left"
           role="navigation"
         >
