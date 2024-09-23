@@ -1,8 +1,10 @@
 import { z } from "zod";
 
 import { UserType } from "@/types";
+
 import clientSideCookieStorage from "./cookie-client-side";
 import { UserSessionNotFoundError } from "./error";
+import { USER_SESSION_COOKIE_KEY } from "./constants";
 
 export const validateAuth = (data: {}) => {
   if (
@@ -29,7 +31,7 @@ export const saveUserSessionToStorage = (user: {
     })
     .parse(user.type);
   clientSideCookieStorage.setCookie(
-    "fork12-conference-user",
+    USER_SESSION_COOKIE_KEY,
     JSON.stringify({
       type: validatedUserType,
       name: user.name,
@@ -40,7 +42,7 @@ export const saveUserSessionToStorage = (user: {
 };
 export const getUserSessionFromStorage = () => {
   const userSession = clientSideCookieStorage.getCookie(
-    "fork12-conference-user"
+    USER_SESSION_COOKIE_KEY
   );
 
   if (!userSession && typeof window !== "undefined")
@@ -51,7 +53,7 @@ export const getUserSessionFromStorage = () => {
     | { type: UserType.TEACHER; name: string; teacher: number };
 };
 export const deleteUserSessionFromStorage = () => {
-  clientSideCookieStorage.deleteCookie("fork12-conference-user");
+  clientSideCookieStorage.deleteCookie(USER_SESSION_COOKIE_KEY);
 };
 
 export const setUserTypeInCookie = (type: string) => {
