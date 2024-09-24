@@ -1,0 +1,13 @@
+version: "3"
+services:
+  fork12-meetings-website:
+    container_name: fork12-meetings-website
+    image: registry.da2ova.com/fork12-meetings-website:latest
+    restart: always
+    networks:
+      - web_default
+
+networks:
+  web_default:
+    driver: bridge
+    external: true
