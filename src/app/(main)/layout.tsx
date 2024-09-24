@@ -1,5 +1,8 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { type Metadata } from "next";
 
+import { USER_SESSION_COOKIE_KEY } from "@/lib/constants";
 import { Layout } from "@/components/layout";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "../providerst";
@@ -16,10 +19,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (!cookies().get(USER_SESSION_COOKIE_KEY)?.value) {
+    redirect("/login");
+  }
+
   return (
     <html lang="en">
       <body
-        className={`${roboto.variable} font-roboto bg-background text-body`}
+        className={`${roboto.variable} bg-background font-roboto text-body`}
       >
         <Toaster />
 
