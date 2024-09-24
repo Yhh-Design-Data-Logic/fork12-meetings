@@ -1,0 +1,58 @@
+pipeline {
+  environment {
+    imagename = "fork12-meetings-website"
+    // replace with your credential inside Jenkins server, for docker registry
+    registryCredential = 'docker'
+    dockerImage = ''
+  }
+
+  agent any
+  stages {
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build(imagename, ". -f deploy/shared/Dockerfile")
+        }
+      }
+    }
+    stage('Pushing image') {
+      steps{
+        script {
+          docker.withRegistry( 'https://registry.da2ova.com/', registryCredential ) {
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
+          }
+        }
+      }
+    }
+    stage('Deploy to production') {
+      steps {
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: "yhh-production",
+              transfers: [sshTransfer(sourceFiles: 'deploy/shared/docker-compose.yaml', remoteDirectory: 'fork12-meetings-website')],
+              verbose: true
+            )
+          ]
+        )
+        echo "Image deployed successfully"
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              // replace with your credential inside Jenkins server, for SSH connection
+              configName: "yhh-production",
+              transfers: [sshTransfer(execCommand: 'docker compose -f fork12-meetings-website/deploy/shared/docker-compose.yaml pull && docker compose -f fork12-meetings-website/deploy/shared/docker-compose.yaml up -d')],
+              verbose: true
+            )
+          ]
+        )
+        echo "Pipeline completed"
+      }
+    }
+  }
+}
