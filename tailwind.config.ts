@@ -85,7 +85,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        roboto: ["var(--font-roboto)"],
+        poppins: ["var(--font-poppins)", "sans-serif"],
         mono: ["var(--font-roboto-mono)"],
       },
       backgroundImage: {

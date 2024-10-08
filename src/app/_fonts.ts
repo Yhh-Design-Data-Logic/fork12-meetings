@@ -1,9 +1,10 @@
-import { Roboto, Roboto_Mono } from "next/font/google";
+import { Roboto, Roboto_Mono, Poppins } from "next/font/google";
 
-export const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
+export const poppins = Poppins({
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-roboto",
+  display: "swap",
+  variable: "--font-poppins",
 });
 
 export const robotoMona = Roboto_Mono({

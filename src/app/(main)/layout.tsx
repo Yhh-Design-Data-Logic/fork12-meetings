@@ -7,7 +7,7 @@ import { Layout } from "@/components/layout";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "../providerst";
 import { AuthVerification } from "./_auth-verify";
-import { roboto } from "../_fonts";
+import { poppins } from "../_fonts";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${roboto.variable} bg-background font-roboto text-body`}
+        className={`${poppins.variable} font-poppins bg-background text-body antialiased`}
       >
         <Toaster />
 
