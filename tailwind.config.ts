@@ -10,7 +10,7 @@ const config: Config = {
   prefix: "",
   theme: {
     container: {
-      padding: "2rem",
+      padding: "1.5rem",
       screens: {
         "2xl": "1400px",
       },
