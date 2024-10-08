@@ -28,6 +28,7 @@ export const MobileMenu = () => {
           <Navigation
             className="p-4 px-2"
             onNavItemClick={() => setOpen(false)}
+            showLogoutBtn
           />
         </DrawerContent>
       </Drawer>

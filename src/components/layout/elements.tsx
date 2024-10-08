@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
@@ -7,12 +8,21 @@ import { LogOutIcon } from "lucide-react";
 
 import authApi from "@/api/auth";
 import { useUserInfo } from "@/hooks";
+import { getUserSessionFromStorage } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import { pageNames } from "./constants";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
+import { Icons } from "../icons";
 
 export const NavItem = ({
   href,
@@ -28,11 +38,17 @@ export const NavItem = ({
   const pathname = usePathname();
 
   return (
-    <li className="flex rounded-xl hover:bg-primary/10" onClick={onClick}>
+    <li
+      className={cn(
+        "relative flex before:absolute before:left-0 before:top-1/2 before:h-3/4 before:w-[3px] before:-translate-y-1/2 before:rounded-br-full before:rounded-tr-full hover:before:bg-primary",
+        href === pathname && "before:bg-primary"
+      )}
+      onClick={onClick}
+    >
       <Link
         href={href}
         className={cn(
-          "inline-flex w-full space-x-2 p-2 lg:p-2.5",
+          "inline-flex w-full space-x-4 py-2 pe-3 ps-5 font-semibold lg:py-2.5",
           href === pathname && "text-primary [&>svg]:stroke-primary"
         )}
       >
@@ -44,36 +60,48 @@ export const NavItem = ({
   );
 };
 
-export const ProfileInfo = () => {
+export const ProfileDropdown = () => {
   const { isLoading, data } = useUserInfo();
 
-  const { name, email } = data ?? {};
+  const userSession = getUserSessionFromStorage();
 
   return (
-    <div className="flex items-center space-x-2 before:mx-3 before:h-10 before:w-px before:bg-zinc-200">
-      <Avatar className="h-11 w-11">
-        <AvatarFallback>{name?.[0] ?? ""}</AvatarFallback>
-      </Avatar>
-
-      <div className="flex flex-col">
-        <span className="text-sm font-bold">
-          {isLoading ? <Skeleton className="h-4 w-24" /> : (name ?? "-")}
-        </span>
-        <span className="text-xs text-body-light">
-          {isLoading ? (
-            <Skeleton className="mt-1 h-3 w-32" />
-          ) : email ? (
-            email.length > 20 ? (
-              email.substring(0, 20) + "..."
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          className="relative flex h-auto flex-col items-end pl-0 pr-8 hover:bg-inherit"
+        >
+          <span className="text-sm font-semibold">
+            {isLoading ? (
+              <Skeleton className="mb-1 h-3 w-32" />
+            ) : data?.email ? (
+              data.email.length > 20 ? (
+                data.email.substring(0, 20) + "..."
+              ) : (
+                data.email
+              )
             ) : (
-              email
-            )
-          ) : (
-            "-"
-          )}
-        </span>
-      </div>
-    </div>
+              "-"
+            )}
+          </span>
+
+          <span className="text-xs text-body-light first-letter:uppercase">
+            {isLoading ? <Skeleton className="h-2.5 w-24" /> : userSession.type}
+          </span>
+
+          <Icons.DropDown className="absolute right-0 top-1/2 -translate-y-1/2" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-40" align="end">
+        <DropdownMenuLabel>{data?.name ?? "..."}</DropdownMenuLabel>
+
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <LogoutBtn className="h-auto w-full justify-start p-0 py-1 text-sm text-inherit hover:bg-inherit [&>svg]:size-[18px]" />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
@@ -91,11 +119,7 @@ export const PageHeading = () => {
   return <h1 className="text-3xl font-bold text-heading">{pageName}</h1>;
 };
 
-export const LogoutBtn = ({
-  wrapperClassName,
-}: {
-  wrapperClassName?: string;
-}) => {
+export const LogoutBtn = ({ className }: { className?: string }) => {
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
@@ -104,21 +128,38 @@ export const LogoutBtn = ({
   });
 
   return (
-    <div
-      className={
-        wrapperClassName
-          ? wrapperClassName
-          : "mt-16 md:fixed md:bottom-8 md:left-4 xl:left-8"
-      }
+    <Button
+      className={cn("text-body-light", className)}
+      variant="ghost"
+      loading={logoutMutation.isPending}
+      onClick={() => logoutMutation.mutate()}
     >
-      <Button
-        className="text-body-light"
-        variant="ghost"
-        loading={logoutMutation.isPending}
-        onClick={() => logoutMutation.mutate()}
-      >
-        <LogOutIcon className="mr-2 text-red-500" />
-        Logout
+      <LogOutIcon className="mr-2 text-red-500" />
+      Logout
+    </Button>
+  );
+};
+
+export const ContactUs = ({ className }: { className?: string }) => {
+  return (
+    <div
+      className={cn(
+        "mx-3.5 mb-8 flex flex-col items-center rounded-xl bg-[#FAFAFB] p-5 text-center",
+        className
+      )}
+    >
+      <Image
+        src="/assets/images/contact-us.svg"
+        alt=""
+        width={94}
+        height={69}
+      />
+      <p className="font-semibold text-[#1C1D21]">Do you need our help?</p>
+      <p className="mb-6 text-sm text-[#8181A5]">Send your request via email</p>
+
+      <Button>
+        <Icons.MailFast className="mr-3" />
+        Contact Us
       </Button>
     </div>
   );

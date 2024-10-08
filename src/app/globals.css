@@ -26,13 +26,12 @@
 
     --radius: 0.5rem;
 
-    --header-area-height: 80px;
+    --header-area-height: 70px;
 
     @screen md {
-      --header-area-height: 96px;
       --sidebar-width: 224px;
     }
-    @screen xl {
+    @screen lg {
       --sidebar-width: 256px;
     }
   }

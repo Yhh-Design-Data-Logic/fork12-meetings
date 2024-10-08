@@ -1,26 +1,27 @@
 "use client";
 
-import { CalendarIcon, LayoutDashboardIcon } from "lucide-react";
-
 import { withErrorBoundary } from "react-error-boundary";
+import { CalendarIcon } from "lucide-react";
 
 import { getUserSessionFromStorage } from "@/lib/auth";
 import { UserType } from "@/types";
 
 import { parentPages, teacherPages } from "./constants";
 import { LogoutBtn, NavItem } from "./elements";
+import { Icons } from "../icons";
 
 const iconsMapper = {
-  dashboard: <LayoutDashboardIcon />,
+  dashboard: <Icons.CalendarCheck />,
   calendar: <CalendarIcon />,
 };
 
 type NavigationProps = {
   className?: string;
+  showLogoutBtn?: boolean;
   onNavItemClick?: () => void;
 };
 export const Navigation = withErrorBoundary(
-  ({ className, onNavItemClick }: NavigationProps) => {
+  ({ className, showLogoutBtn, onNavItemClick }: NavigationProps) => {
     const userSession = getUserSessionFromStorage();
 
     const pages =
@@ -29,6 +30,7 @@ export const Navigation = withErrorBoundary(
     return (
       <div className={className}>
         <nav>
+          <p className="mb-3 ps-5 text-sm font-semibold text-[#8A8A8C]">Main</p>
           <ul className="space-y-4">
             {pages.map(({ href, icon, title }) => (
               <NavItem
@@ -42,7 +44,7 @@ export const Navigation = withErrorBoundary(
           </ul>
         </nav>
 
-        <LogoutBtn />
+        {showLogoutBtn && <LogoutBtn className="mt-16" />}
       </div>
     );
   },
