@@ -6,26 +6,29 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-base font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-white hover:bg-primary/90 dark:text-slate-900",
+          "bg-primary-700 text-white hover:bg-primary-600 active:bg-primary-800",
         destructive:
           "bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90",
         outline:
-          "border border-primary bg-white text-primary hover:bg-slate-50 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50",
+          "border border-primary bg-white text-primary hover:bg-slate-50 dark:bg-slate-950 dark:hover:bg-slate-800",
         secondary:
-          "bg-secondary text-white hover:bg-secondary/80 dark:text-slate-50",
+          "bg-primary-200 text-primary-800 hover:bg-primary-300 active:bg-primary-400 dark:text-slate-50",
+        tertiary: "bg-secondary-100 text-secondary-900 active:bg-secondary-200",
         ghost:
           "hover:bg-primary/10 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50",
         link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
       },
       size: {
         default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        sm: "h-9 px-3.5 py-2",
+        lg: "h-11 px-[18px] py-2.5",
+        xl: "h-12 px-5 py-3",
+        xxl: "h-[60px] px-7 py-4",
         icon: "h-10 w-10",
       },
     },
