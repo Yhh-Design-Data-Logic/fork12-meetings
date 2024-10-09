@@ -30,7 +30,9 @@ export const Navigation = withErrorBoundary(
     return (
       <div className={className}>
         <nav>
-          <p className="mb-3 ps-5 text-sm font-semibold text-[#8A8A8C]">Main</p>
+          <p className="mb-3 ps-5 text-sm font-semibold text-neutral-500">
+            Main
+          </p>
           <ul className="space-y-4">
             {pages.map(({ href, icon, title }) => (
               <NavItem
