@@ -12,7 +12,18 @@ async function getAll() {
           "name",
           {
             parent: ["id", "name"],
-            teachers: ["id", { teachers_id: ["id", "name"] }],
+            teachers: [
+              "id",
+              {
+                teachers_id: [
+                  "id",
+                  "name",
+                  "subject",
+                  { timeslots: ["id", "start_date", "end_date", "meeting"] },
+                ],
+              },
+            ],
+            class: ["id", "name"],
           },
         ],
       })
