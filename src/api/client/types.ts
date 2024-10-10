@@ -19,14 +19,23 @@ export type Child = {
   name: string;
   parent: number | Parent;
   teachers: number[] | ChildrenTeachers[];
+  class: number | Class | null;
 };
 
 export type Teacher = {
   id: number;
   name: string;
+  subject: string;
   user: string | DirectusUser<CustomDirectusUser>;
   timeslots: number[] | Timeslot[];
   meetings: number[] | Meeting[];
+};
+
+export type Class = {
+  id: number;
+  name?: string;
+  academic_year: string;
+  students: number[] | Child[];
 };
 
 export type Timeslot = {
@@ -54,6 +63,7 @@ export interface Schema {
   parents: Parent[];
   children: Child[];
   teachers: Teacher[];
+  classes: Class[];
   timeslots: Timeslot[];
 
   children_teachers: ChildrenTeachers[];
