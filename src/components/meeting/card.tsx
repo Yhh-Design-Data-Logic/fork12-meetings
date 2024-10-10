@@ -80,15 +80,17 @@ export const MeetingCard = <E extends React.ElementType = "div">({
         Join
       </Button>
 
-      <p className="text-center text-sm text-neutral-600">
-        can’t be in time?{" "}
-        <Link
-          className="font-medium text-secondary underline"
-          href="/parent-calendar"
-        >
-          reschedule it
-        </Link>
-      </p>
+      {userType === UserType.PARENT && (
+        <p className="text-center text-sm text-neutral-600">
+          can’t be in time?{" "}
+          <Link
+            className="font-medium text-secondary underline"
+            href="/parent-calendar"
+          >
+            reschedule it
+          </Link>
+        </p>
+      )}
     </Tag>
   );
 };
