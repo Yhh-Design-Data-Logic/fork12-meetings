@@ -46,8 +46,8 @@ export const MeetingCard = <E extends React.ElementType = "div">({
       className="max-w-[756px] space-y-4 rounded-xl border border-neutral-100 bg-white p-4 lg:p-6"
       {...otherProps}
     >
-      <div className="lg:flex lg:items-start lg:justify-between">
-        <div>
+      <div className="md:flex md:items-start md:justify-between">
+        <div className="mb-4 md:mb-0">
           <MeetingInfo
             userType={userType}
             name={participant.name}
@@ -62,7 +62,7 @@ export const MeetingCard = <E extends React.ElementType = "div">({
           />
         </div>
 
-        <div className="flex items-center space-x-1.5 text-sm font-semibold text-neutral-600">
+        <div className="flex items-center justify-end space-x-1.5 text-sm font-semibold text-neutral-600">
           <Avatar className="h-6 w-6">
             <AvatarFallback className="text-xs">
               {participant.name[0]}
@@ -82,7 +82,10 @@ export const MeetingCard = <E extends React.ElementType = "div">({
 
       <p className="text-center text-sm text-neutral-600">
         can’t be in time?{" "}
-        <Link className="font-medium text-secondary underline" href="/">
+        <Link
+          className="font-medium text-secondary underline"
+          href="/parent-calendar"
+        >
           reschedule it
         </Link>
       </p>
