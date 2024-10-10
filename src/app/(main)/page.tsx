@@ -106,9 +106,9 @@ function HomePageComponent() {
                           endTime={meeting.endDate}
                           participant={{
                             name: meeting.name,
-                            email: "teacher@gmail.com",
+                            email: meeting.email,
                           }}
-                          child={"Child Omar"}
+                          child={meeting.child}
                           userType={userSession.type}
                           as="li"
                         />
@@ -133,9 +133,9 @@ function HomePageComponent() {
                           endTime={meeting.endDate}
                           participant={{
                             name: meeting.name,
-                            email: "teacher@gmail.com",
+                            email: meeting.email,
                           }}
-                          child={"Child Omar"}
+                          child={meeting.child}
                           userType={userSession.type}
                           as="li"
                         />

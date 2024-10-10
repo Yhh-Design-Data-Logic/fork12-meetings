@@ -128,7 +128,8 @@ const UserInfo: React.FC<{
     </Avatar>
     <div className="flex flex-col text-sm text-neutral-600">
       <span className="font-semibold first-letter:uppercase">
-        {userType === UserType.PARENT ? "Teacher" : "You"} {name.split(" ")[0]}
+        {userType === UserType.PARENT ? "Teacher" : "Parent"}{" "}
+        {name.split(" ")[0]}
       </span>
       <span className="w-[18ch] overflow-hidden whitespace-nowrap font-mono">
         {email}

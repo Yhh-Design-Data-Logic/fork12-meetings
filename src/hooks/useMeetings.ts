@@ -28,6 +28,11 @@ export const useMeetings = () => {
               : meeting.parent.name,
           startDate: meeting.timeslot.start_date,
           endDate: meeting.timeslot.end_date,
+          child: meeting?.child?.name ?? "-",
+          email:
+            userSession.type === UserType.PARENT
+              ? "teacher@gmail.com"
+              : "parent@gmail.com",
         }));
     },
   });
