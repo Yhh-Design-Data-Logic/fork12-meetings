@@ -30,7 +30,18 @@ async function getAll() {
     )
   );
 
-  return data;
+  return data.map((d) => ({
+    ...d,
+    teachers: d.teachers?.map((tc) => ({
+      ...tc,
+      teachers_id: {
+        ...tc.teachers_id,
+        timeslots: tc.teachers_id.timeslots?.filter(
+          (ts) => ts.meeting.length === 0
+        ),
+      },
+    })),
+  }));
 }
 
 const childrenApi = { getAll };
