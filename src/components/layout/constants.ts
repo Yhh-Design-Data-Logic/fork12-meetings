@@ -1,11 +1,9 @@
 export const parentPages = [
   { href: "/", title: "Meetings", icon: "dashboard" },
-  { href: "/parent-calendar", title: "Calendar", icon: "calendar" },
 ] as const;
 
 export const teacherPages = [
   { href: "/", title: "Meetings", icon: "dashboard" },
-  { href: "/teacher-calendar", title: "Calendar", icon: "calendar" },
 ] as const;
 
 export const pageNames = [
