@@ -51,6 +51,7 @@ const config: Config = {
           700: "#272A30",
           800: "#23262B",
           900: "#1E2125",
+          1000: "#191B1E",
         },
         destructive: {
           DEFAULT: "rgb(var(--destructive) / <alpha-value>) /* #eb6e63 */",
