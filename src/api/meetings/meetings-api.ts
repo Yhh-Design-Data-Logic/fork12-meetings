@@ -32,6 +32,7 @@ const create = async (data: {
   parentId: number;
   teacherId: number;
   timeslotId: number;
+  childId: number;
 }) => {
   const result = await apiClient.request(
     withToken(
@@ -40,6 +41,7 @@ const create = async (data: {
         teacher: data.teacherId,
         parent: data.parentId,
         timeslot: data.timeslotId,
+        child: data.childId,
       })
     )
   );
@@ -52,6 +54,7 @@ const bulkCreate = async (
     parentId: number;
     teacherId: number;
     timeslotId: number;
+    childId: number;
   }[]
 ) => {
   const result = await apiClient.request(
@@ -63,6 +66,7 @@ const bulkCreate = async (
           teacher: item.teacherId,
           parent: item.parentId,
           timeslot: item.timeslotId,
+          child: item.childId,
         }))
       )
     )
