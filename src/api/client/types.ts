@@ -5,6 +5,7 @@ export type Meeting = {
   parent: number | Parent;
   teacher: number | Teacher;
   timeslot: number | Timeslot;
+  child: number | Child;
 };
 
 export type Parent = {
@@ -20,6 +21,7 @@ export type Child = {
   parent: number | Parent;
   teachers: number[] | ChildrenTeachers[];
   class: number | Class | null;
+  meetings: number[] | null;
 };
 
 export type Teacher = {
