@@ -2,23 +2,25 @@
 
 import { useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import Link from "next/link";
 
 import { useMeetings } from "@/hooks";
-import { formatDate, isSameDay, isSameDayAndAfter } from "@/lib/date";
+import { isSameDayAndAfter } from "@/lib/date";
 import { getUserSessionFromStorage } from "@/lib/auth";
-import { cn } from "@/lib/utils";
 
 import { ErrorBoundaryPageFallback } from "@/components/error";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Skeleton } from "@/components/ui/skeleton";
-import { MeetingCard, MeetingCardSkeleton } from "@/components/cards";
+import { MeetingCard, DateGroup } from "@/components/meeting";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
+import { MeetingsPageSkeleton } from "./_components/skeletons";
 
 function HomePageComponent() {
   const [category, setCategory] = useState<"upcoming" | "past">("upcoming");
 
   const userSession = getUserSessionFromStorage();
 
-  const { isLoading, data } = useMeetings();
+  const { status, data } = useMeetings();
 
   const meetingsByDay = useMemo(() => {
     return data?.reduce(
@@ -55,107 +57,99 @@ function HomePageComponent() {
     );
   }, [meetingsByDay]);
 
-  if (isLoading) {
-    return (
-      <div className="container space-y-8 py-10">
-        <Skeleton className="mb-4 h-10 w-44 rounded-lg md:mb-8 md:h-12 md:w-56" />
-        {Array.from({ length: 3 }).map((_, idx) => (
-          <div key={idx}>
-            <Skeleton className="mb-2 h-5 w-20" />
+  return (
+    <div className="container pb-10 pt-5">
+      <Tabs
+        value={category}
+        onValueChange={(value) => setCategory(value as typeof category)}
+      >
+        <div className="mb-5 flex flex-col justify-between gap-5 md:mb-8 lg:flex-row lg:items-center">
+          <h1 className="text-2xl font-semibold text-[#171725]">Meetings</h1>
 
-            <ul className="space-y-3">
-              {Array.from({ length: 3 }).map((_, idx) => (
-                <MeetingCardSkeleton key={idx} />
-              ))}
-            </ul>
+          <div className="flex items-center space-x-6 self-end">
+            <TabsList className="grid grid-cols-2 shadow-sm lg:w-80">
+              <TabsTrigger className="md:px-4" value="upcoming">
+                Upcoming
+              </TabsTrigger>
+              <TabsTrigger className="md:px-4" value="past">
+                Past
+              </TabsTrigger>
+            </TabsList>
+
+            <Button className="lg:text-base" asChild>
+              <Link href="/parent-calendar">
+                <Icons.CalendarPlus className="mr-2" />
+                Book Meeting
+              </Link>
+            </Button>
           </div>
-        ))}
-      </div>
-    );
-  }
+        </div>
 
-  if (meetingsByCategory) {
-    return (
-      <div className="container py-10">
-        <Tabs
-          value={category}
-          onValueChange={(value) => setCategory(value as typeof category)}
-        >
-          <TabsList className="mb-4 grid w-fit grid-cols-2 bg-zinc-100 shadow-sm md:mb-8 md:h-auto md:p-1.5">
-            <TabsTrigger
-              className="md:px-4 md:py-2 md:text-base"
-              value="upcoming"
-            >
-              Upcoming
-            </TabsTrigger>
-            <TabsTrigger className="md:px-4 md:py-2 md:text-base" value="past">
-              Past
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent className="space-y-8" value="upcoming">
-            {meetingsByCategory.upcoming.map((item) =>
-              Object.keys(item).map((date) => (
-                <div key={date}>
-                  <span
-                    className={cn(
-                      "mb-2 block font-bold",
-                      isSameDay(date) && "text-primary"
-                    )}
-                  >
-                    {formatDate(date, "ddd, DD MMM")}
-                  </span>
+        {status === "pending" ? (
+          <MeetingsPageSkeleton />
+        ) : status === "error" ? (
+          <p>An Error Occured.</p>
+        ) : meetingsByCategory ? (
+          <>
+            <TabsContent className="space-y-8" value="upcoming">
+              {meetingsByCategory.upcoming.map((item) =>
+                Object.keys(item).map((date) => (
+                  <div key={date}>
+                    <DateGroup date={date} />
 
-                  <ul className="space-y-3">
-                    {item[date].map((meeting) => (
-                      <MeetingCard
-                        key={meeting.id}
-                        id={meeting.id}
-                        startDate={meeting.startDate}
-                        endDate={meeting.endDate}
-                        name={meeting.name}
-                        userType={userSession.type}
-                        as="li"
-                      />
-                    ))}
-                  </ul>
-                </div>
-              ))
-            )}
-          </TabsContent>
-          <TabsContent className="space-y-8" value="past">
-            {meetingsByCategory.past.map((item) =>
-              Object.keys(item).map((date) => (
-                <div key={date}>
-                  <span
-                    className={cn(
-                      "mb-2 block font-bold",
-                      isSameDay(date) && "text-primary"
-                    )}
-                  >
-                    {formatDate(date, "ddd, DD MMM")}
-                  </span>
+                    <ul className="space-y-4">
+                      {item[date].map((meeting) => (
+                        <MeetingCard
+                          key={meeting.id}
+                          id={meeting.id}
+                          startTime={meeting.startDate}
+                          endTime={meeting.endDate}
+                          participant={{
+                            name: meeting.name,
+                            email: "teacher@gmail.com",
+                          }}
+                          child={"Child Omar"}
+                          userType={userSession.type}
+                          as="li"
+                        />
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              )}
+            </TabsContent>
+            <TabsContent className="space-y-8" value="past">
+              {meetingsByCategory.past.map((item) =>
+                Object.keys(item).map((date) => (
+                  <div key={date}>
+                    <DateGroup date={date} />
 
-                  <ul className="space-y-3">
-                    {item[date].map((meeting) => (
-                      <MeetingCard
-                        key={meeting.id}
-                        id={meeting.id}
-                        startDate={meeting.startDate}
-                        endDate={meeting.endDate}
-                        name={meeting.name}
-                        userType={userSession.type}
-                        as="li"
-                      />
-                    ))}
-                  </ul>
-                </div>
-              ))
-            )}
-          </TabsContent>
-        </Tabs>
-      </div>
-    );
-  }
+                    <ul className="space-y-4">
+                      {item[date].map((meeting) => (
+                        <MeetingCard
+                          key={meeting.id}
+                          id={meeting.id}
+                          startTime={meeting.startDate}
+                          endTime={meeting.endDate}
+                          participant={{
+                            name: meeting.name,
+                            email: "teacher@gmail.com",
+                          }}
+                          child={"Child Omar"}
+                          userType={userSession.type}
+                          as="li"
+                        />
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              )}
+            </TabsContent>
+          </>
+        ) : null}
+      </Tabs>
+    </div>
+  );
 }
 
 export default function HomePage() {
