@@ -1,4 +1,10 @@
-import { createItem, readItems, withToken, triggerFlow } from "@directus/sdk";
+import {
+  createItem,
+  readItems,
+  withToken,
+  triggerFlow,
+  createItems,
+} from "@directus/sdk";
 
 import { apiClient } from "../client/browser";
 
@@ -41,6 +47,30 @@ const create = async (data: {
   return result;
 };
 
+const bulkCreate = async (
+  data: {
+    parentId: number;
+    teacherId: number;
+    timeslotId: number;
+  }[]
+) => {
+  const result = await apiClient.request(
+    withToken(
+      (await apiClient.getToken()) ?? "",
+      createItems(
+        "meetings",
+        data.map((item) => ({
+          teacher: item.teacherId,
+          parent: item.parentId,
+          timeslot: item.timeslotId,
+        }))
+      )
+    )
+  );
+
+  return result;
+};
+
 const getMeetingRoomToken = async (meetingId: number) => {
   const result = await apiClient.request<{
     app_id: number;
@@ -61,5 +91,5 @@ const getMeetingRoomToken = async (meetingId: number) => {
   return result;
 };
 
-const meetingsApi = { getAll, create, getMeetingRoomToken };
+const meetingsApi = { getAll, create, bulkCreate, getMeetingRoomToken };
 export default meetingsApi;
