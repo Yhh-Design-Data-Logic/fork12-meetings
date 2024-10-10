@@ -9,7 +9,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <div className="min-h-screen md:flex">
         <Sidebar />
 
-        <main className="mt-[var(--header-area-height)] md:grow">
+        <main className="mt-[var(--header-area-height)] md:flex-auto md:grow md:overflow-auto">
           {children}
         </main>
       </div>
