@@ -14,28 +14,37 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MeetingCard, DateGroup } from "@/components/meeting";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
+
 import { MeetingsPageSkeleton } from "./_components/skeletons";
+import { ChildSelect } from "./_components/child-select";
 
 function HomePageComponent() {
   const [category, setCategory] = useState<"upcoming" | "past">("upcoming");
+  const [selectedChild, setSelectedChild] = useState("All");
 
   const userSession = getUserSessionFromStorage();
 
   const { status, data } = useMeetings();
 
   const meetingsByDay = useMemo(() => {
-    return data?.reduce(
-      (groups, meeting) => {
-        const date = meeting.startDate.split("T")[0];
-        if (!groups[date]) {
-          groups[date] = [];
-        }
-        groups[date].push(meeting);
-        return groups;
-      },
-      {} as Record<string, typeof data>
-    );
-  }, [data]);
+    return data
+      ?.filter((meeting) =>
+        selectedChild === "All"
+          ? true
+          : String(meeting.child.id) === selectedChild
+      )
+      ?.reduce(
+        (groups, meeting) => {
+          const date = meeting.startDate.split("T")[0];
+          if (!groups[date]) {
+            groups[date] = [];
+          }
+          groups[date].push(meeting);
+          return groups;
+        },
+        {} as Record<string, typeof data>
+      );
+  }, [data, selectedChild]);
 
   const meetingsByCategory = useMemo(() => {
     return (
@@ -67,7 +76,7 @@ function HomePageComponent() {
         <div className="mb-5 flex flex-col justify-between gap-5 md:mb-8 lg:flex-row lg:items-center">
           <h1 className="text-2xl font-semibold text-[#171725]">Meetings</h1>
 
-          <div className="flex items-center space-x-6 self-end">
+          <div className="flex flex-col space-y-4 self-end sm:flex-row sm:items-center sm:space-x-6 sm:space-y-0">
             <TabsList className="grid grid-cols-2 shadow-sm lg:w-80">
               <TabsTrigger className="md:px-4" value="upcoming">
                 Upcoming
@@ -78,12 +87,26 @@ function HomePageComponent() {
             </TabsList>
 
             {userSession.type === UserType.PARENT && (
-              <Button className="lg:text-base" asChild>
-                <Link href="/parent-calendar">
-                  <Icons.CalendarPlus className="mr-2" />
-                  Book Meeting
-                </Link>
-              </Button>
+              <div className="flex items-center space-x-6">
+                <ChildSelect
+                  items={Array.from(
+                    new Map(
+                      (data ?? [])
+                        .map((meeting) => meeting.child)
+                        .filter((m) => Boolean(m.id))
+                        .map((item) => [item.id, item])
+                    ).values()
+                  )}
+                  onChange={setSelectedChild}
+                />
+
+                <Button className="lg:text-base" asChild>
+                  <Link href="/parent-calendar">
+                    <Icons.CalendarPlus className="mr-2" />
+                    Book Meeting
+                  </Link>
+                </Button>
+              </div>
             )}
           </div>
         </div>
@@ -111,7 +134,7 @@ function HomePageComponent() {
                             name: meeting.name,
                             email: meeting.email,
                           }}
-                          child={meeting.child}
+                          child={meeting.child.name}
                           userType={userSession.type}
                           as="li"
                         />
@@ -138,7 +161,7 @@ function HomePageComponent() {
                             name: meeting.name,
                             email: meeting.email,
                           }}
-                          child={meeting.child}
+                          child={meeting.child.name}
                           userType={userSession.type}
                           as="li"
                         />

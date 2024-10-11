@@ -28,7 +28,10 @@ export const useMeetings = () => {
               : meeting.parent.name,
           startDate: meeting.timeslot.start_date,
           endDate: meeting.timeslot.end_date,
-          child: meeting?.child?.name ?? "-",
+          child: {
+            id: meeting?.child?.id,
+            name: meeting?.child?.name ?? "-",
+          },
           email:
             userSession.type === UserType.PARENT
               ? "teacher@gmail.com"

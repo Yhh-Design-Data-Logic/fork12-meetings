@@ -19,7 +19,7 @@ async function getAll() {
             parent: ["id", "name"],
             teacher: ["id", "name"],
             timeslot: ["id", "start_date", "end_date"],
-            child: ["name"],
+            child: ["id", "name"],
           },
         ],
       })
