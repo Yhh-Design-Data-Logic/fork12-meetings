@@ -140,7 +140,7 @@ const UserInfo: React.FC<{
 
 export const MeetingCardSkeleton = () => {
   return (
-    <div className="max-w-2xl space-y-4 rounded-xl border border-neutral-100 bg-white p-4 lg:p-6">
+    <div className="max-w-[756px] space-y-4 rounded-xl border border-neutral-100 bg-white p-4 lg:p-6">
       <div className="lg:flex lg:items-start lg:justify-between">
         <div>
           <Skeleton className="mb-2 h-5 w-52 rounded-full" />
