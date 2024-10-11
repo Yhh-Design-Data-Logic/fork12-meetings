@@ -80,7 +80,7 @@ export const MeetingCard = <E extends React.ElementType = "div">({
         Join
       </Button>
 
-      {userType === UserType.PARENT && (
+      {/* {userType === UserType.PARENT && (
         <p className="text-center text-sm text-neutral-600">
           can’t be in time?{" "}
           <Link
@@ -90,7 +90,7 @@ export const MeetingCard = <E extends React.ElementType = "div">({
             reschedule it
           </Link>
         </p>
-      )}
+      )} */}
     </Tag>
   );
 };
@@ -176,9 +176,9 @@ export const MeetingCardSkeleton = () => {
       <Skeleton className="h-10 w-full rounded-xl" />
 
       {/* CTA */}
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <Skeleton className="h-4 w-52 rounded-xl" />
-      </div>
+      </div> */}
     </div>
   );
 };
