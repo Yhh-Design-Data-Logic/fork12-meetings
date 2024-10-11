@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useMeetings } from "@/hooks";
 import { isSameDayAndAfter } from "@/lib/date";
 import { getUserSessionFromStorage } from "@/lib/auth";
+import { UserType } from "@/types";
 
 import { ErrorBoundaryPageFallback } from "@/components/error";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -76,12 +77,14 @@ function HomePageComponent() {
               </TabsTrigger>
             </TabsList>
 
-            <Button className="lg:text-base" asChild>
-              <Link href="/parent-calendar">
-                <Icons.CalendarPlus className="mr-2" />
-                Book Meeting
-              </Link>
-            </Button>
+            {userSession.type === UserType.PARENT && (
+              <Button className="lg:text-base" asChild>
+                <Link href="/parent-calendar">
+                  <Icons.CalendarPlus className="mr-2" />
+                  Book Meeting
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
 
