@@ -68,7 +68,7 @@ export const MeetingCard = <E extends React.ElementType = "div">({
               {participant.name[0]}
             </AvatarFallback>
           </Avatar>
-          <div>{child}</div>
+          <div>Child {child}</div>
         </div>
       </div>
 

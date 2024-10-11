@@ -145,7 +145,7 @@ function ParentCalendarPageComponent() {
                       </Avatar>
 
                       <div className="flex flex-col">
-                        <h4 className="font-semibold">{child.name}</h4>
+                        <h4 className="font-semibold">Child {child.name}</h4>
                         <span className="">{child.grade}</span>
                       </div>
                     </div>
