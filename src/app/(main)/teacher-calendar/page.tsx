@@ -1,11 +1,14 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { ErrorBoundary } from "react-error-boundary";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 
 import { useAvailableMeetingSlots } from "@/hooks";
 import timeslotsApi from "@/api/timeslots";
+import { getUserSessionFromStorage } from "@/lib/auth";
+import { UserType } from "@/types";
 
 import { ErrorBoundaryPageFallback } from "@/components/error";
 import { AvailableInterviewSlot } from "@/components/cards";
@@ -13,6 +16,8 @@ import { AvailableInterviewSlot } from "@/components/cards";
 import { InterviewSlotsDialog } from "../_components";
 
 function CalendarPageComponent() {
+  const router = useRouter();
+
   const { isLoading, data } = useAvailableMeetingSlots();
 
   const queryClient = useQueryClient();
@@ -22,6 +27,13 @@ function CalendarPageComponent() {
       queryClient.invalidateQueries({ queryKey: ["available-timeslots"] });
     },
   });
+
+  const userSession = getUserSessionFromStorage();
+
+  if (userSession.type !== UserType.TEACHER) {
+    router.replace("/");
+    return null;
+  }
 
   return (
     <div className="container py-10">

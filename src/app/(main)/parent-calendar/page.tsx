@@ -10,6 +10,8 @@ import { useChildren, useMeetings } from "@/hooks";
 import meetingsApi from "@/api/meetings";
 import { getUserSessionFromStorage } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { UserType } from "@/types";
+
 import {
   Dialog,
   DialogContent,
@@ -97,6 +99,11 @@ function ParentCalendarPageComponent() {
       }))
     );
   };
+
+  if (userSession.type !== UserType.PARENT) {
+    router.replace("/");
+    return null;
+  }
 
   return (
     <div className="container relative py-20 pt-5">
